@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv';
 import DatabaseConn from './config/db.js';
 import userRoutes from "./Routes/users.js";
+import productRoutes from "./Routes/product.js";
 
 dotenv.config();
 // Database Connection
@@ -14,7 +15,7 @@ app.use(express.json());
 
 // Routes
 app.use("/auth",userRoutes);
-app.use("/products",userRoutes);
+app.use("/products",productRoutes);
 
 // Server
 const PORT = process.env.PORT || 3000;

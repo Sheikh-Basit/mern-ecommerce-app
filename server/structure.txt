@@ -1,0 +1,84 @@
+mern-ecommerce-app/
+│
+├── backend/                  # Node.js + Express
+│   ├── config/               # DB, passport, cloudinary, etc.
+│   │   └── db.js
+│   │   └── passport.js
+│   │
+│   ├── controllers/          # Controllers for each model
+│   │   ├── authController.js
+│   │   ├── userController.js
+│   │   ├── productController.js
+│   │   ├── orderController.js
+│   │
+│   ├── middlewares/          # Middleware (auth, error handling, etc.)
+│   │   ├── authMiddleware.js
+│   │   └── errorMiddleware.js
+│   │
+│   ├── models/               # MongoDB Schemas
+│   │   ├── User.js
+│   │   ├── Product.js
+│   │   ├── Order.js
+│   │   └── Category.js
+│   │
+│   ├── routes/               # Express routes
+│   │   ├── authRoutes.js
+│   │   ├── userRoutes.js
+│   │   ├── productRoutes.js
+│   │   ├── orderRoutes.js
+│   │
+│   ├── utils/                # Helpers (token, validators, etc.)
+│   │   └── generateToken.js
+│   │
+│   ├── server.js             # Main entry point
+│   └── package.json
+│
+├── frontend/                 # React (Vite or CRA)
+│   ├── public/
+│   │   └── index.html
+│   │
+│   ├── src/
+│   │   ├── api/              # Axios API calls
+│   │   │   └── axiosInstance.js
+│   │   │   └── productApi.js
+│   │   │   └── authApi.js
+│   │   │
+│   │   ├── components/       # Shared components
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   └── ProductCard.jsx
+│   │   │
+│   │   ├── context/          # Context API or Redux
+│   │   │   └── AuthContext.js
+│   │   │
+│   │   ├── pages/            # Pages
+│   │   │   ├── Home.jsx
+│   │   │   ├── ProductList.jsx
+│   │   │   ├── ProductDetail.jsx
+│   │   │   ├── Cart.jsx
+│   │   │   ├── Checkout.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   └── AdminDashboard.jsx
+│   │   │
+│   │   ├── routes/           # React Router setup
+│   │   │   └── AppRoutes.jsx
+│   │   │
+│   │   ├── store/            # Redux Toolkit store (if used)
+│   │   │   └── store.js
+│   │   │   └── productSlice.js
+│   │   │   └── authSlice.js
+│   │   │
+│   │   ├── utils/            # Helpers (format currency, validators)
+│   │   │   └── formatPrice.js
+│   │   │
+│   │   ├── App.jsx
+│   │   ├── index.jsx
+│   │   └── styles/           # Tailwind or custom CSS
+│   │       └── global.css
+│   │
+│   └── package.json
+│
+├── .env                      # Environment variables
+├── README.md
+└── package.json              # Root (optional if you manage both together)

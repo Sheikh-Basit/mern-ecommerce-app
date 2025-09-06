@@ -1,8 +1,11 @@
 import express from 'express';
 import User from "../Models/User.js";
 import { body, validationResult } from 'express-validator';
+
 // Import bcrypt for convert the plain password to hashed
 import bcrypt from 'bcrypt';
+
+// Import jwt for authentication
 import jwt from 'jsonwebtoken';
 
 // import Middleware fetch user

@@ -9,7 +9,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 // import Middleware fetch user
-import fetchUser from '../middleware/fetchUser.js';
+import {fetchUser} from '../middleware/fetchUser.js';
 
 // Import crypto to save hashedToken for forgot password
 import crypto from "crypto";
@@ -75,7 +75,7 @@ router.post("/login",[
     }
 
     // Payload for generating the token
-    const payload = { userID:user._id }
+    const payload = { userID:user._id, role: user.role }
     
     const secretKey = process.env.SECRET_KEY;
     const token = jwt.sign(payload, secretKey)

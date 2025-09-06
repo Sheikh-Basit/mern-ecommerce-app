@@ -4,7 +4,7 @@ dotenv.config();
 
 const secretKey = process.env.SECRET_KEY;
 
-const fetchUser = async (req, res, next) =>{
+export const fetchUser = async (req, res, next) =>{
     try {
         const token = req.header('authToken');
      if (!token) {
@@ -19,4 +19,9 @@ const fetchUser = async (req, res, next) =>{
     
 }
 
-export default fetchUser;
+export const isAdmin = (req, res, next) => {
+    if(req.user.role !== "admin"){
+        return res.status(403).json({ message: "Admin access required" });
+    }
+    next();
+}

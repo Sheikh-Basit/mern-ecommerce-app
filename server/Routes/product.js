@@ -1,6 +1,6 @@
 import express from "express";
 import Product from "../Models/Product.js";
-import fetchUser from "../middleware/fetchUser.js";
+import {fetchUser} from "../middleware/fetchUser.js";
 import User from "../Models/User.js";
 const router = express.Router();
 

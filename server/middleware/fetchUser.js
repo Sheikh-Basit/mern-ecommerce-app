@@ -11,7 +11,7 @@ export const fetchUser = async (req, res, next) =>{
             return res.status(401).send({ error: "Please authenticate using a valid token" })
     }
     const data = await jwt.verify(token,secretKey);
-    req.user = data.userID;
+    req.user = data;
     next();
     } catch (error) {
         return res.status(401).send({ error: "Please authenticate using a valid token" })

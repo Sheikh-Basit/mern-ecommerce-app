@@ -7,7 +7,7 @@ import { fetchUser, isAdmin } from "../middleware/fetchUser.js";
 const router = express.Router();
 
 // 1 => Get All Products using the GET request: http://localhost:3000/products/
-router.get("/", async (req, res) => {
+router.get("/",fetchUser, async (req, res) => {
   try {
     const products = await Product.find();
 

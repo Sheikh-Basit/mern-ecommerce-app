@@ -9,9 +9,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 // import Middleware fetch user
-import {fetchUser} from '../middleware/fetchUser.js';
+import {fetchUser, isAdmin} from '../middleware/fetchUser.js';
 
-// Import crypto to save hashedToken for forgot password
+// Import crypto to generate random hashedToken for forgot password
 import crypto from "crypto";
 
 
@@ -39,7 +39,7 @@ router.post("/register",[
     const salt = 10;
     const hashpassword = await bcrypt.hash(password, salt);
 
-    const newUser = new User({ username, email, password:hashpassword });
+    const newUser = new User({ username, email, password:hashpassword, role:"user" });
     await newUser.save();
 
     res.status(201).json({ message: "User registered successfully!" });
@@ -65,13 +65,13 @@ router.post("/login",[
     // Check email is exist or not
     const user = await User.findOne({email});
     if(!user){
-        return res.status(400).json({error: 'Please enter the correct login caredential'})
+        return res.status(400).json({error: 'Please enter the correct login credentials'})
     }
 
     // Compare the passwords
     const originalpassword = await bcrypt.compare(password, user.password);
     if(!originalpassword){
-        return res.status(400).json({error: 'Please enter the correct login caredential'})
+        return res.status(400).json({error: 'Please enter the correct login credentials'})
     }
 
     // Payload for generating the token
@@ -89,7 +89,7 @@ router.post("/login",[
 // 3 => Get User Data using the GET request: http://localhost:3000/auth/getUser
 router.get("/getUser", fetchUser, async (req, res) => {
   try {
-    const userID = req.user;
+    const userID = req.user.userID;
     
     const user = await User.findById(userID).select("-password");
     res.send(user)
@@ -100,7 +100,20 @@ router.get("/getUser", fetchUser, async (req, res) => {
   }
 });
 
-// 4 => Forgot Password using the POST request: http://localhost:3000/auth/forgotPassword
+// 4 => Get All Users (Access Only Admin) using the GET request: http://localhost:3000/auth/admin/users
+router.get("/admin/users", fetchUser, isAdmin, async (req, res) => {
+  try {
+    
+    const users = await User.find();
+    res.send(users)
+    
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 5 => Forgot Password using the POST request: http://localhost:3000/auth/forgotPassword
 router.post("/forgotPassword",[
     body('email').isEmail().withMessage('Enter the correct Email Address'),
 ], async (req, res) => {
@@ -137,7 +150,7 @@ router.post("/forgotPassword",[
   }
 });
 
-// 5 => Reset Password using the POST request: http://localhost:3000/auth/forgotPassword/:token
+// 6 => Reset Password using the POST request: http://localhost:3000/auth/forgotPassword/:token
 router.post("/forgotPassword/:token",[
     body('password').isLength({min:5}).withMessage('Password must be atleast 5 character long'),
 ], async (req, res) => {

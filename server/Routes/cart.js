@@ -128,9 +128,9 @@ router.delete("/deleteFromCart/:productId", fetchUser, async (req, res) => {
     }
 
     // if no item in the cart
-    if(cart.items.length === 0){
+    if(cart.items.length === 1){
         await Cart.deleteOne({user: userid})
-        return res.status(404).json({message: "No item in the cart"})
+        return res.status(404).json({message: "Item deleted successfully"})
     }
 
     // Check product is exist in cart
@@ -144,6 +144,24 @@ router.delete("/deleteFromCart/:productId", fetchUser, async (req, res) => {
 
     await cart.save();
     res.status(200).json({message:"Item deleted successfully"});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 5 =>  Clear Cart using the DELETE request: http://localhost:3000/cart/clearCart
+router.delete("/clearCart", fetchUser, async (req, res) => {
+  try {
+    // get the user id from middleware
+    const userid = req.user.userID;
+    if(!userid){
+      return res.status(400).json({error: "You have not access to delete"});
+    }
+
+    // Clear the Cart
+    await Cart.deleteOne({user: userid})
+    
+    res.status(200).json({message:"Cart clear successfully"});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

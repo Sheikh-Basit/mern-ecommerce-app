@@ -22,7 +22,7 @@ router.get("/", fetchUser, async (req, res) => {
 });
 
 // 2 =>  Add Products in the Cart using the POST request: http://localhost:3000/cart/addItem/:productid
-router.post("/addItem/:productId", fetchUser, async (req, res) => {
+router.post("/addToCart/:productId", fetchUser, async (req, res) => {
   try {
     // get the user id from middleware
     const userid = req.user.userID;
@@ -67,7 +67,7 @@ router.post("/addItem/:productId", fetchUser, async (req, res) => {
 });
 
 // 3 =>  Update Product in Cart using the PUT request: http://localhost:3000/cart/updateItem/:productid
-router.put("/updateItem/:productId", fetchUser, async (req, res) => {
+router.put("/updateCart/:productId", fetchUser, async (req, res) => {
   try {
     // get the user id from middleware
     const userid = req.user.userID;
@@ -93,7 +93,7 @@ router.put("/updateItem/:productId", fetchUser, async (req, res) => {
     if(!updatedProduct){
         return res.status(400).json({message:"Product not fount in the cart"})
     }
-    
+
     // Update the product
     updatedProduct.quantity = req.body.quantity;
 
@@ -105,7 +105,7 @@ router.put("/updateItem/:productId", fetchUser, async (req, res) => {
 });
 
 // 4 =>  Delete Product from Cart using the DELETE request: http://localhost:3000/cart/deleteItem/:productid
-router.delete("/deleteItem/:productId", fetchUser, async (req, res) => {
+router.delete("/deleteFromCart/:productId", fetchUser, async (req, res) => {
   try {
     // get the user id from middleware
     const userid = req.user.userID;

@@ -22,17 +22,6 @@ const checkoutSchema = new Schema(
 
     // User Cart
     items: [{cart:{type: Schema.Types.ObjectId,ref:"Cart", required: true}}],
-    // items: [
-    //   {
-    //     product: {
-    //       type: Schema.Types.ObjectId,
-    //       ref: "Product",
-    //       required: true,
-    //     },
-    //     quantity: { type: Number, required: true, min: 1 },
-    //     // totalPrice: { type: Number, required: true }, 
-    //   },
-    // ],
 
     // order summary
     totalAmount: { type: Number, required: true },

@@ -5,8 +5,8 @@ import Cart from "../Models/Cart.js";
 import Checkout from "../Models/CheckOut.js";
 const router = express.Router();
 
-// 1 => Get Checkout Detail using the GET request: http://localhost:3000/checkout/
-router.get(
+// 1 => Get Checkout Detail using the POST request: http://localhost:3000/checkout/
+router.post(
     "/",
     [
         body("fullName").notEmpty().withMessage("Name must be required"),
@@ -24,48 +24,51 @@ router.get(
             if (!result.isEmpty()) {
                 return res.status(400).json({ error: result.array() });
             }
-
-            //   Get data from body
-            const { fullName, email, phone, address, city, country, postalCode } = req.body;
-
+            
             // Get user id from middleware
             const userid = req.user.userID;
-
+            
             // Get Cart items from loggedin user
             const cart = await Cart.findOne({user: userid})
             if(!cart){
                 return res.status(404).json({error:"Your Cart is empty"});
             }
-            console.log(cart._id)
-
+            
             const totalAmount = cart.items.reduce((sum, item) => sum + item.totalPrice, 0);
-
-
+            
+            // User checkout detail
+            const { fullName, email, phone, address, city, country, postalCode } = req.body;
             const userDetails = {fullName, email, phone, address, city, country, postalCode};
 
             // Prepare Checkout
 
-            const checkout = await Checkout.findOne({user: userid});
+            let checkout = await Checkout.findOne({user: userid});
             if(!checkout){
-                // Create new checkout for loggedin user
+                // Create new checkout
                 checkout = new Checkout({
                     user: userid,
-                    userDetails: userDetails,
-                    cart: [{cart:cart._id}],
-                    totalAmount: totalAmount,
+                    userDetails,
+                    items: [{cart:cart._id}],
+                    totalAmount,
                     paymentMethod:"COD",
                     paymentStatus:"Pending",
                     orderStatus:"Pending"
     
                 })
                 await checkout.save();
-                return res.status(200).json({message:"Order Successfull", checkout})
+                return res.status(200).json({message:"Checkout created successfully", checkout})
+            }
+
+            // check if the cart is already exist
+            const itemExist = checkout.items.some(item => item.cart.toString() === cart.id.toString())
+            if(itemExist){
+                return res.json({message:"Cart is already added", checkout})
             }
 
             checkout.items.push({cart:cart._id})
+            await checkout.save();
 
-
-            res.json({message:"Order Successfull", checkout})
+            return res.status(200).json({message:"Checkout created successfully", checkout})
 
 
 

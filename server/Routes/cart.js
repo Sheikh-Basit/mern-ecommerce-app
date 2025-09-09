@@ -86,6 +86,9 @@ router.put("/updateCart/:productId", fetchUser, async (req, res) => {
       return res.status(400).json({ error: "Product not found" });
     }
 
+    // get the product price
+    const productPrice = product.price;
+
     // find cart of user
     let cart = await Cart.findOne({ user: userid });
     
@@ -100,6 +103,7 @@ router.put("/updateCart/:productId", fetchUser, async (req, res) => {
 
     // Update the product
     updatedProduct.quantity = req.body.quantity;
+    updatedProduct.totalPrice = productPrice * req.body.quantity;
 
     await cart.save();
     res.status(200).json({message:"Item updated successfully"});

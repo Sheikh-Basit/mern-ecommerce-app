@@ -37,6 +37,9 @@ router.post("/addToCart/:productId", fetchUser, async (req, res) => {
       return res.status(400).json({ error: "Product not found" });
     }
 
+    // get the product price
+    const productPrice = product.price;
+
     // find cart of user
     let cart = await Cart.findOne({ user: userid });
     
@@ -44,7 +47,7 @@ router.post("/addToCart/:productId", fetchUser, async (req, res) => {
       // create new cart
       cart = new Cart({
         user: userid,
-        items: [{ product: productID, quantity: 1 }],
+        items: [{ product: productID, quantity: 1, totalPrice:productPrice }],
       });
     } else {
       // Check product is exist in cart
@@ -53,9 +56,10 @@ router.post("/addToCart/:productId", fetchUser, async (req, res) => {
       if (cartItemsProduct) {
         // increase qyuantity
         cartItemsProduct.quantity += 1;
+        cartItemsProduct.totalPrice = cartItemsProduct.quantity * productPrice;
       } else {
         // Push new product
-        cart.items.push({ product: productID, quantity: 1 });
+        cart.items.push({ product: productID, quantity: 1, totalPrice: productPrice });
       }
     }
 

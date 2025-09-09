@@ -4,6 +4,7 @@ import DatabaseConn from './config/db.js';
 import userRoutes from "./Routes/auth.js";
 import productRoutes from "./Routes/product.js";
 import cartRoutes from "./Routes/cart.js";
+import checkOutRoutes from "./Routes/checkout.js";
 
 dotenv.config();
 // Database Connection
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use("/auth",userRoutes);
 app.use("/products",productRoutes);
 app.use("/cart",cartRoutes);
+app.use("/checkout",checkOutRoutes);
 
 // Server
 const PORT = process.env.PORT || 3000;

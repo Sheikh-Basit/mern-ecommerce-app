@@ -30,10 +30,10 @@ router.post(
             
             // Get Cart items from loggedin user
             const cart = await Cart.findOne({user: userid})
-            if(!cart){
+            if(!cart || !cart.items || cart.items.length === 0){
                 return res.status(404).json({error:"Your Cart is empty"});
             }
-            
+            // find total amount
             const totalAmount = cart.items.reduce((sum, item) => sum + item.totalPrice, 0);
             
             // User checkout detail
@@ -62,7 +62,13 @@ router.post(
             // check if the cart is already exist
             const itemExist = checkout.items.some(item => item.cart.toString() === cart.id.toString())
             if(itemExist){
-                return res.json({message:"Cart is already added", checkout})
+                const cart = await Cart.findOne({user: userid})
+                // find total amount
+                const totalAmount = cart.items.reduce((sum, item) => sum + item.totalPrice, 0);
+                checkout.totalAmount = totalAmount;
+                checkout.userDetails = userDetails;
+                await checkout.save();
+                return res.status(200).json({message:"Checkout updated with latest cart totals", checkout})
             }
 
             checkout.items.push({cart:cart._id})

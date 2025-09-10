@@ -3,6 +3,7 @@ import { fetchUser } from "../middleware/fetchUser.js";
 import { body, validationResult } from "express-validator";
 import Cart from "../Models/Cart.js";
 import Checkout from "../Models/CheckOut.js";
+import Notification from "../Models/Notification.js";
 const router = express.Router();
 
 // 1 => Get Checkout Detail using the POST request: http://localhost:3000/checkout/
@@ -24,57 +25,103 @@ router.post(
             if (!result.isEmpty()) {
                 return res.status(400).json({ error: result.array() });
             }
-            
+
             // Get user id from middleware
             const userid = req.user.userID;
-            
+
             // Get Cart items from loggedin user
-            const cart = await Cart.findOne({user: userid})
-            if(!cart || !cart.items || cart.items.length === 0){
-                return res.status(404).json({error:"Your Cart is empty"});
+            const cart = await Cart.findOne({ user: userid })
+            if (!cart || !cart.items || cart.items.length === 0) {
+                return res.status(404).json({ error: "Your Cart is empty" });
             }
             // find total amount
             const totalAmount = cart.items.reduce((sum, item) => sum + item.totalPrice, 0);
-            
+
             // User checkout detail
             const { fullName, email, phone, address, city, country, postalCode } = req.body;
-            const userDetails = {fullName, email, phone, address, city, country, postalCode};
+            const userDetails = { fullName, email, phone, address, city, country, postalCode };
 
             // Prepare Checkout
 
-            let checkout = await Checkout.findOne({user: userid});
-            if(!checkout){
+            let checkout = await Checkout.findOne({ user: userid });
+            if (!checkout) {
                 // Create new checkout
                 checkout = new Checkout({
                     user: userid,
                     userDetails,
-                    items: [{cart:cart._id}],
+                    items: [{ cart: cart._id }],
                     totalAmount,
-                    paymentMethod:"COD",
-                    paymentStatus:"Pending",
-                    orderStatus:"Pending"
-    
+                    paymentMethod: "COD",
+                    paymentStatus: "Pending",
+                    orderStatus: "Pending"
+
                 })
+
+                // Generate admin notification
+                await Notification.create({
+                    message: "New order placed",
+                    user: userid,
+                    checkout: checkout._id
+                })
+
+                // Need Approval from Admin
+                const adminApproval = await Notification.findOne({ user: userid });
+                if (!adminApproval.approved) {
+                    return res.json({ message: "Wait for Admin Approval" });
+                }
                 await checkout.save();
-                return res.status(200).json({message:"Checkout created successfully", checkout})
+
+
+                return res.status(200).json({ message: "Checkout created successfully", checkout })
             }
 
             // check if the cart is already exist
             const itemExist = checkout.items.some(item => item.cart.toString() === cart.id.toString())
-            if(itemExist){
-                const cart = await Cart.findOne({user: userid})
+            if (itemExist) {
+                const cart = await Cart.findOne({ user: userid })
                 // find total amount
                 const totalAmount = cart.items.reduce((sum, item) => sum + item.totalPrice, 0);
                 checkout.totalAmount = totalAmount;
                 checkout.userDetails = userDetails;
+
+
+                // Generate admin notification
+                await Notification.create({
+                    message: "New order placed",
+                    user: userid,
+                    checkout: checkout._id
+                })
+
+                // Need Approval from Admin
+                const adminApproval = await Notification.findOne({ user: userid });
+                if (!adminApproval.approved) {
+                    return res.json({ message: "Wait for Admin Approval" });
+                }
+
                 await checkout.save();
-                return res.status(200).json({message:"Checkout updated with latest cart totals", checkout})
+
+                return res.status(200).json({ message: "Checkout updated with latest cart totals", checkout })
             }
 
-            checkout.items.push({cart:cart._id})
+            checkout.items.push({ cart: cart._id })
+
+            // Generate admin notification
+            await Notification.create({
+                message: "New order placed",
+                user: userid,
+                checkout: checkout._id
+            })
+
+            // Need Approval from Admin
+            const adminApproval = await Notification.findOne({ user: userid });
+            if (!adminApproval.approved) {
+                return res.json({ message: "Wait for Admin Approval" });
+            }
+
             await checkout.save();
 
-            return res.status(200).json({message:"Checkout created successfully", checkout})
+
+            return res.status(200).json({ message: "Checkout created successfully", checkout })
 
 
 

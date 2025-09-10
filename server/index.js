@@ -5,6 +5,7 @@ import userRoutes from "./Routes/auth.js";
 import productRoutes from "./Routes/product.js";
 import cartRoutes from "./Routes/cart.js";
 import checkOutRoutes from "./Routes/checkout.js";
+import notificationRoutes from "./Routes/notification.js";
 
 dotenv.config();
 // Database Connection
@@ -20,6 +21,7 @@ app.use("/auth",userRoutes);
 app.use("/products",productRoutes);
 app.use("/cart",cartRoutes);
 app.use("/checkout",checkOutRoutes);
+app.use("/notification",notificationRoutes);
 
 // Server
 const PORT = process.env.PORT || 3000;

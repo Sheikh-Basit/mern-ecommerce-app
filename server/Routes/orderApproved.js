@@ -1,10 +1,10 @@
 import express from 'express';
 import { fetchUser, isAdmin } from '../middleware/fetchUser.js';
-import Notification from '../Models/Notification.js';
+import Notification from '../Models/OrderApproved.js';
 const router = express.Router();
 
-// 1 => Get all Notification (Access only Admin) using the GET request: http://localhost:3000/notification/getAllNotification
-router.get('/getAllNotification', fetchUser, isAdmin, async(req, res)=>{
+// 1 => Get all Notification (Access only Admin) using the GET request: http://localhost:3000/order/getAllOrders
+router.get('/getAllOrders', fetchUser, isAdmin, async(req, res)=>{
     try {
         const notificaton = await Notification.find({type: "Order"})
         .populate("user", "username email")
@@ -16,7 +16,7 @@ router.get('/getAllNotification', fetchUser, isAdmin, async(req, res)=>{
     }
 })
 
-// 2 => Admin approved order (Access only Admin) using the GET request: http://localhost:3000/notification/orderApproved
+// 2 => Admin approved order (Access only Admin) using the GET request: http://localhost:3000/order/orderApproved
 router.post('/orderApproved/:id', fetchUser, isAdmin, async(req, res)=>{
     try {
         const notificaton = await Notification.findByIdAndUpdate(

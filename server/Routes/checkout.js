@@ -3,7 +3,7 @@ import { fetchUser } from "../middleware/fetchUser.js";
 import { body, validationResult } from "express-validator";
 import Cart from "../Models/Cart.js";
 import Checkout from "../Models/CheckOut.js";
-import Notification from "../Models/Notification.js";
+import OrderApproved from "../Models/OrderApproved.js";
 const router = express.Router();
 
 // 1 => Get Checkout Detail using the POST request: http://localhost:3000/checkout/
@@ -57,15 +57,15 @@ router.post(
 
                 })
 
-                // Generate admin notification
-                await Notification.create({
+                // Generate admin notification for order approved
+                await OrderApproved.create({
                     message: "New order placed",
                     user: userid,
                     checkout: checkout._id
                 })
 
                 // Need Approval from Admin
-                const adminApproval = await Notification.findOne({ user: userid });
+                const adminApproval = await OrderApproved.findOne({ user: userid });
                 if (!adminApproval.approved) {
                     return res.json({ message: "Wait for Admin Approval" });
                 }
@@ -85,15 +85,15 @@ router.post(
                 checkout.userDetails = userDetails;
 
 
-                // Generate admin notification
-                await Notification.create({
+                // Generate admin notification for order approved
+                await OrderApproved.create({
                     message: "New order placed",
                     user: userid,
                     checkout: checkout._id
                 })
 
                 // Need Approval from Admin
-                const adminApproval = await Notification.findOne({ user: userid });
+                const adminApproval = await OrderApproved.findOne({ user: userid });
                 if (!adminApproval.approved) {
                     return res.json({ message: "Wait for Admin Approval" });
                 }
@@ -105,15 +105,15 @@ router.post(
 
             checkout.items.push({ cart: cart._id })
 
-            // Generate admin notification
-            await Notification.create({
+            // Generate admin notification for order approved
+            await OrderApproved.create({
                 message: "New order placed",
                 user: userid,
                 checkout: checkout._id
             })
 
             // Need Approval from Admin
-            const adminApproval = await Notification.findOne({ user: userid });
+            const adminApproval = await OrderApproved.findOne({ user: userid });
             if (!adminApproval.approved) {
                 return res.json({ message: "Wait for Admin Approval" });
             }

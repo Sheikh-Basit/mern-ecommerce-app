@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const {Schema} = mongoose;
 
-const notificationSchema = new Schema({
+const orderApprovedSchema = new Schema({
     message: {type: String, required: true},
     type: {type: String, enum:["Order"], default: "Order"},
     user: {type: Schema.Types.ObjectId, ref: "User" },
@@ -9,5 +9,5 @@ const notificationSchema = new Schema({
     approved: {type: Boolean, default: false}
 }, {timestamps: true});
 
-const Notification = mongoose.model("Notification", notificationSchema);
-export default Notification;
+const OrderApproved = mongoose.model("OrderApproved", orderApprovedSchema);
+export default OrderApproved;

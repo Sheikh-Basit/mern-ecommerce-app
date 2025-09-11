@@ -5,8 +5,8 @@ const orderApprovedSchema = new Schema({
     message: {type: String, required: true},
     type: {type: String, enum:["Order"], default: "Order"},
     user: {type: Schema.Types.ObjectId, ref: "User" },
-    checkout: {type: Schema.Types.ObjectId, ref: "Checkout"},
-    approved: {type: Boolean, default: false}
+    checkoutData: {type: Object, required: true},  // temperory hold checkout data
+    approved: { type: String, enum: ["Pending", "Approved", "Rejected"], default: "Pending" }
 }, {timestamps: true});
 
 const OrderApproved = mongoose.model("OrderApproved", orderApprovedSchema);

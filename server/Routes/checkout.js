@@ -41,90 +41,31 @@ router.post(
             const { fullName, email, phone, address, city, country, postalCode } = req.body;
             const userDetails = { fullName, email, phone, address, city, country, postalCode };
 
-            // Prepare Checkout
-
-            let checkout = await Checkout.findOne({ user: userid });
-            if (!checkout) {
-                // Create new checkout
-                checkout = new Checkout({
-                    user: userid,
-                    userDetails,
-                    items: [{ cart: cart._id }],
-                    totalAmount,
-                    paymentMethod: "COD",
-                    paymentStatus: "Pending",
-                    orderStatus: "Pending"
-
-                })
-
-                // Generate admin notification for order approved
-                await OrderApproved.create({
-                    message: "New order placed",
-                    user: userid,
-                    checkout: checkout._id
-                })
-
-                // Need Approval from Admin
-                const adminApproval = await OrderApproved.findOne({ user: userid });
-                if (!adminApproval.approved) {
-                    return res.json({ message: "Wait for Admin Approval" });
-                }
-                await checkout.save();
+            // Prepare temperory Checkout not save in the DB
 
 
-                return res.status(200).json({ message: "Checkout created successfully", checkout })
-            }
-
-            // check if the cart is already exist
-            const itemExist = checkout.items.some(item => item.cart.toString() === cart.id.toString())
-            if (itemExist) {
-                const cart = await Cart.findOne({ user: userid })
-                // find total amount
-                const totalAmount = cart.items.reduce((sum, item) => sum + item.totalPrice, 0);
-                checkout.totalAmount = totalAmount;
-                checkout.userDetails = userDetails;
-
-
-                // Generate admin notification for order approved
-                await OrderApproved.create({
-                    message: "New order placed",
-                    user: userid,
-                    checkout: checkout._id
-                })
-
-                // Need Approval from Admin
-                const adminApproval = await OrderApproved.findOne({ user: userid });
-                if (!adminApproval.approved) {
-                    return res.json({ message: "Wait for Admin Approval" });
-                }
-
-                await checkout.save();
-
-                return res.status(200).json({ message: "Checkout updated with latest cart totals", checkout })
-            }
-
-            checkout.items.push({ cart: cart._id })
-
-            // Generate admin notification for order approved
-            await OrderApproved.create({
-                message: "New order placed",
+            const checkoutData = {
                 user: userid,
-                checkout: checkout._id
+                userDetails,
+                items: [{ cart: cart._id }],
+                totalAmount,
+                paymentMethod: "COD",
+                paymentStatus: "Pending",
+                orderStatus: "Pending"
+
+            }
+
+            // create notification for admin for order approved
+            await OrderApproved.create({
+                message: "New order placed - waiting for approval",
+                user: userid,
+                checkoutData
             })
 
-            // Need Approval from Admin
-            const adminApproval = await OrderApproved.findOne({ user: userid });
-            if (!adminApproval.approved) {
-                return res.json({ message: "Wait for Admin Approval" });
-            }
+            // Clear the cart
+            await Cart.deleteOne({ user: userid })
 
-            await checkout.save();
-
-
-            return res.status(200).json({ message: "Checkout created successfully", checkout })
-
-
-
+            return res.status(200).json({ message: "Wait for admin approval. Your order is pending" })
         } catch (err) {
             res.status(500).json({ error: err.message });
         }

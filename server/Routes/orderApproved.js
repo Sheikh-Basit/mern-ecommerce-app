@@ -52,6 +52,8 @@ router.post('/orderApproved/:id', fetchUser, isAdmin, async (req, res) => {
             await orderForApproval.save();
 
             return res.status(200).json({ message: "Order approved and saved", checkout });
+        }else if (approval === "Rejected"){
+            console.log("Order Rejected")
         }
     } catch (err) {
         res.status(500).json({ error: err.message });

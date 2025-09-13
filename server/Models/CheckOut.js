@@ -20,28 +20,36 @@ const checkoutSchema = new Schema(
       country: { type: String, required: true }
     },
 
-    // User Cart
-    items: [{cart:{type: Schema.Types.ObjectId,ref:"Cart", required: true}}],
+    // Order Summary
+    orderSummary: [{
+      // Cart detail
+      cart:{type: Object, required: true},
 
-    // order summary
-    totalAmount: { type: Number, required: true },
-    paymentMethod: {
-      type: String,
-      enum: ["COD", "Card", "PayPal"],
-      required: true,
-    },
-    paymentStatus: {
-      type: String,
-      enum: ["Pending", "Paid", "Failed"],
-      default: "Pending",
-    },
+      // Total Amount
+      totalAmount: { type: Number, required: true },
 
-    // order status
-    orderStatus: {
-      type: String,
-      enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"],
-      default: "Pending",
-    },
+      // Payment Method
+      paymentMethod: {
+        type: String,
+        enum: ["COD", "Card", "PayPal"],
+        required: true,
+      },
+
+      // Payment Status
+      paymentStatus: {
+        type: String,
+        enum: ["Pending", "Paid", "Failed"],
+        default: "Pending",
+      },
+  
+      // Order status
+      orderStatus: {
+        type: String,
+        enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"],
+        default: "Pending",
+      },
+    }],
+
   },
   { timestamps: true }
 );

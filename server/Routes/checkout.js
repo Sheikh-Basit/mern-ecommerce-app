@@ -42,16 +42,19 @@ router.post(
             const userDetails = { fullName, email, phone, address, city, country, postalCode };
 
             // Prepare temperory Checkout not save in the DB
-
-
             const checkoutData = {
                 user: userid,
                 userDetails,
-                items: [{ cart: cart._id }],
-                totalAmount,
-                paymentMethod: "COD",
-                paymentStatus: "Pending",
-                orderStatus: "Pending"
+                orderSummary: [{
+                    cart: {
+                        cartId: cart._id,
+                        cartItems: cart.items 
+                    },
+                    totalAmount,  // sum of all product totalprice in the cart
+                    paymentMethod: "COD",
+                    paymentStatus: "Pending",
+                    orderStatus: "Pending"
+                }],
 
             }
 

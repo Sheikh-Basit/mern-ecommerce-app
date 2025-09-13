@@ -25,7 +25,6 @@ router.post('/orderApproved/:id', fetchUser, isAdmin, async (req, res) => {
         if (!orderForApproval) {
             return res.status(404).json({ message: "Order not found" });
         }
-        console.log(orderForApproval.checkoutData)
 
         // If admin approves
         if (approval === "Approved") {
@@ -37,13 +36,15 @@ router.post('/orderApproved/:id', fetchUser, isAdmin, async (req, res) => {
                 await checkout.save();
             } else {
                 // Avoid duplicate cart
-                const newCartId = orderForApproval.checkoutData.cart.toString();
-                const alreadyExist = checkout.items.some(
-                    item => item.cart.toString() === newCartId
+                const newUserDetails = orderForApproval. checkoutData.userDetails;
+                const newOrderSummary = orderForApproval.checkoutData.orderSummary[0];
+                const alreadyExist = checkout.orderSummary.some(
+                    item => item.cart.cartId.toString() === newOrderSummary.cart.cartId.toString()
                 );
 
                 if (!alreadyExist) {
-                    checkout.items.push({ cart: newCartId });
+                    checkout.userDetails.push(newUserDetails);
+                    checkout.orderSummary.push(newOrderSummary);
                     await checkout.save();
                 }
             }
@@ -52,9 +53,17 @@ router.post('/orderApproved/:id', fetchUser, isAdmin, async (req, res) => {
             await orderForApproval.save();
 
             return res.status(200).json({ message: "Order approved and saved", checkout });
-        }else if (approval === "Rejected"){
-            console.log("Order Rejected")
         }
+
+        // if admin reject the order
+        
+        if (approval === "Rejected"){
+            orderForApproval.approved = "Rejected"
+            await orderForApproval.save()
+            return res.status(200).json({message:"Order rejected"})
+        }
+
+        return res.status(400).json({message: "Invalid approval status"})
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

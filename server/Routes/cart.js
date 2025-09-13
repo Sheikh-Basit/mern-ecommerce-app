@@ -14,7 +14,7 @@ router.get("/", fetchUser, async (req, res) => {
     const userid = req.user.userID;
 
     const cart = await Cart.find({ user: userid });
-    
+
     res.send(cart);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -32,7 +32,7 @@ router.post("/addToCart/:productId", fetchUser, async (req, res) => {
 
     //check product is exist or not
     const product = await Product.findById(productID);
-    
+
     if (!product) {
       return res.status(400).json({ error: "Product not found" });
     }
@@ -42,16 +42,16 @@ router.post("/addToCart/:productId", fetchUser, async (req, res) => {
 
     // find cart of user
     let cart = await Cart.findOne({ user: userid });
-    
+
     if (!cart) {
       // create new cart
       cart = new Cart({
         user: userid,
-        items: [{ product: productID, quantity: 1, totalPrice:productPrice }],
+        items: [{ productId: productID, quantity: 1, productPrice: productPrice, totalPrice: productPrice * 1 }],
       });
     } else {
       // Check product is exist in cart
-      const cartItemsProduct = cart.items.find((item) => item.product.toString() === productID);
+      const cartItemsProduct = cart.items.find((item) => item.productId.toString() === productID);
       // Check if product is exist then
       if (cartItemsProduct) {
         // increase qyuantity
@@ -59,12 +59,12 @@ router.post("/addToCart/:productId", fetchUser, async (req, res) => {
         cartItemsProduct.totalPrice = cartItemsProduct.quantity * productPrice;
       } else {
         // Push new product
-        cart.items.push({ product: productID, quantity: 1, totalPrice: productPrice });
+        cart.items.push({ productId: productID, quantity: 1, productPrice: productPrice, totalPrice: productPrice * 1 });
       }
     }
 
     await cart.save();
-    res.status(200).json({cart, message:"Item added in cart"});
+    res.status(200).json({ cart, message: "Item added in cart" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -81,7 +81,7 @@ router.put("/updateCart/:productId", fetchUser, async (req, res) => {
 
     //check product is exist or not
     const product = await Product.findById(productID);
-    
+
     if (!product) {
       return res.status(400).json({ error: "Product not found" });
     }
@@ -91,14 +91,14 @@ router.put("/updateCart/:productId", fetchUser, async (req, res) => {
 
     // find cart of user
     let cart = await Cart.findOne({ user: userid });
-    
+
     if (!cart) {
       return res.json({ message: "No item in the cart" });
     }
     // Check product is exist in cart
-    const updatedProduct = cart.items.find((item) => item.product.toString() === productID);
-    if(!updatedProduct){
-        return res.status(400).json({message:"Product not fount in the cart"})
+    const updatedProduct = cart.items.find((item) => item.productId.toString() === productID);
+    if (!updatedProduct) {
+      return res.status(400).json({ message: "Product not fount in the cart" })
     }
 
     // Update the product
@@ -106,7 +106,7 @@ router.put("/updateCart/:productId", fetchUser, async (req, res) => {
     updatedProduct.totalPrice = productPrice * req.body.quantity;
 
     await cart.save();
-    res.status(200).json({message:"Item updated successfully"});
+    res.status(200).json({ message: "Item updated successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -123,35 +123,35 @@ router.delete("/deleteFromCart/:productId", fetchUser, async (req, res) => {
 
     //check product is exist or not
     const product = await Product.findById(productID);
-    
+
     if (!product) {
       return res.status(400).json({ error: "Product not found" });
     }
 
     // find cart of user
     let cart = await Cart.findOne({ user: userid });
-    
+
     if (!cart) {
       return res.json({ message: "No item in the cart" });
     }
 
     // if no item in the cart
-    if(cart.items.length === 1){
-        await Cart.deleteOne({user: userid})
-        return res.status(404).json({message: "Item deleted successfully"})
+    if (cart.items.length === 1) {
+      await Cart.deleteOne({ user: userid })
+      return res.status(404).json({ message: "Item deleted successfully" })
     }
 
     // Check product is exist in cart
-    const deletedProduct = cart.items.find((item) => item.product.toString() === productID);
-    if(!deletedProduct){
-        return res.status(400).json({message:"Product not fount in the cart"})
+    const deletedProduct = cart.items.find((item) => item.productId.toString() === productID);
+    if (!deletedProduct) {
+      return res.status(400).json({ message: "Product not fount in the cart" })
     }
 
     // Delete the product
-    cart.items.pull({product:productID});
+    cart.items.pull({ productId: productID });
 
     await cart.save();
-    res.status(200).json({message:"Item deleted successfully"});
+    res.status(200).json({ message: "Item deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -162,14 +162,14 @@ router.delete("/clearCart", fetchUser, async (req, res) => {
   try {
     // get the user id from middleware
     const userid = req.user.userID;
-    if(!userid){
-      return res.status(400).json({error: "You have not access to delete"});
+    if (!userid) {
+      return res.status(400).json({ error: "You have not access to delete" });
     }
 
     // Clear the Cart
-    await Cart.deleteOne({user: userid})
-    
-    res.status(200).json({message:"Cart clear successfully"});
+    await Cart.deleteOne({ user: userid })
+
+    res.status(200).json({ message: "Cart clear successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

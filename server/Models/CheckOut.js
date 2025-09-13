@@ -45,7 +45,7 @@ const checkoutSchema = new Schema(
       // Order status
       orderStatus: {
         type: String,
-        enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"],
+        enum: ["Pending", "Processing", "Delivered", "Cancelled"],
         default: "Pending",
       },
     }],

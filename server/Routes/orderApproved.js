@@ -2,6 +2,7 @@ import express from 'express';
 import { fetchUser, isAdmin } from '../middleware/fetchUser.js';
 import OrderApproved from '../Models/OrderApproved.js';
 import Checkout from '../Models/CheckOut.js';
+import UserNotification from '../Models/UserNotification.js';
 const router = express.Router();
 
 // 1 => Get all Notification (Access only Admin) using the GET request: http://localhost:3000/order/getAllOrders
@@ -34,9 +35,10 @@ router.post('/orderApproved/:id', fetchUser, isAdmin, async (req, res) => {
                 // Create new checkout with all order data
                 checkout = new Checkout(orderForApproval.checkoutData);
                 await checkout.save();
+
             } else {
                 // Avoid duplicate cart
-                const newUserDetails = orderForApproval. checkoutData.userDetails;
+                const newUserDetails = orderForApproval.checkoutData.userDetails;
                 const newOrderSummary = orderForApproval.checkoutData.orderSummary[0];
                 const alreadyExist = checkout.orderSummary.some(
                     item => item.cart.cartId.toString() === newOrderSummary.cart.cartId.toString()
@@ -45,25 +47,43 @@ router.post('/orderApproved/:id', fetchUser, isAdmin, async (req, res) => {
                 if (!alreadyExist) {
                     checkout.userDetails.push(newUserDetails);
                     checkout.orderSummary.push(newOrderSummary);
+
                     await checkout.save();
                 }
             }
-
+            // set the status approved in the orderApproved Schema
             orderForApproval.approved = "Approved";
             await orderForApproval.save();
+
+            // generate notification for user
+            await UserNotification.create({
+                user: orderForApproval.user,
+                message:"Your order has been approved ✅",
+                checkoutId: checkout._id,
+                status: "Approved"
+            })
 
             return res.status(200).json({ message: "Order approved and saved", checkout });
         }
 
         // if admin reject the order
-        
-        if (approval === "Rejected"){
+
+        if (approval === "Rejected") {
             orderForApproval.approved = "Rejected"
             await orderForApproval.save()
-            return res.status(200).json({message:"Order rejected"})
+
+            // generate notification for user
+            await UserNotification.create({
+                user: orderForApproval.user,
+                message:"Sorry, your order has been rejected ❌",
+                checkoutId: orderForApproval._id,
+                status: "Rejected"
+            })
+
+            return res.status(200).json({ message: "Order rejected" })
         }
 
-        return res.status(400).json({message: "Invalid approval status"})
+        return res.status(400).json({ message: "Invalid approval status" })
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

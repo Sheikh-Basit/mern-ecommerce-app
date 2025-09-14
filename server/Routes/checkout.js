@@ -53,7 +53,6 @@ router.post(
                     totalAmount,  // sum of all product totalprice in the cart
                     paymentMethod: "COD",
                     paymentStatus: "Pending",
-                    orderStatus: "Pending"
                 }],
 
             }

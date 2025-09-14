@@ -3,7 +3,7 @@ import { fetchUser } from "../middleware/fetchUser.js";
 import { body, validationResult } from "express-validator";
 import Cart from "../Models/Cart.js";
 import Checkout from "../Models/CheckOut.js";
-import OrderApproved from "../Models/OrderApproved.js";
+import Notification from "../Models/Notifications.js";
 const router = express.Router();
 
 // 1 => Get Checkout Detail using the POST request: http://localhost:3000/checkout/
@@ -41,33 +41,62 @@ router.post(
             const { fullName, email, phone, address, city, country, postalCode } = req.body;
             const userDetails = { fullName, email, phone, address, city, country, postalCode };
 
-            // Prepare temperory Checkout not save in the DB
-            const checkoutData = {
-                user: userid,
-                userDetails,
-                orderSummary: [{
-                    cart: {
-                        cartId: cart._id,
-                        cartItems: cart.items 
-                    },
-                    totalAmount,  // sum of all product totalprice in the cart
-                    paymentMethod: "COD",
-                    paymentStatus: "Pending",
-                }],
 
+            // Build order summary object
+            const orderSummary = {
+                cart: {
+                    cartId: cart._id,
+                    cartItems: cart.items,
+                },
+                totalAmount,
+                paymentMethod: "COD",
+                paymentStatus: "Pending",
+                orderStatus: "Pending",
+            };
+
+            // Prepare Checkout
+
+            let checkout = await Checkout.findOne({ user: userid });
+            if (!checkout) {
+                // Create new checkout
+                checkout = new Checkout({
+                    user: userid,
+                    userDetails,
+                    orderSummary: [orderSummary],
+
+                })
+            } else {
+                // Prevent duplicate cart in checkout
+                const alreadyExists = checkout.orderSummary.some(
+                    (item) => item.cart.cartId.toString() === cart._id.toString()
+                );
+
+                if (!alreadyExists) {
+                    checkout.orderSummary.push(orderSummary);
+                } else {
+                    return res.status(400).json({ message: "This cart is already in checkout" });
+                }
             }
 
-            // create notification for admin for order approved
-            await OrderApproved.create({
-                message: "New order placed - waiting for approval",
+
+            // Save checkout
+            await checkout.save();
+
+            // Create admin notification
+            await Notification.create({
+                message: "New order placed",
                 user: userid,
-                checkoutData
-            })
+                checkoutId: checkout._id,
+                status: "Pending",
+            });
 
-            // Clear the cart
-            await Cart.deleteOne({ user: userid })
+            // Clear Cart after checkout
+            await Cart.findOneAndDelete({ user: userid });
 
-            return res.status(200).json({ message: "Wait for admin approval. Your order is pending" })
+            return res.status(200).json({ message: "Checkout created successfully", checkout })
+
+
+
         } catch (err) {
             res.status(500).json({ error: err.message });
         }

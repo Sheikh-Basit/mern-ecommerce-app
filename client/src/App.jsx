@@ -8,7 +8,7 @@ function App() {
   return (
     <Router>
     <div className='container-fluid flex'>
-      <h1>this is h1 tag</h1>
+      
     <MainPage/>
     </div>
     </Router>

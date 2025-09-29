@@ -1,15 +1,15 @@
 import react from 'react'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import Login from './Pages/Login';
 
 function App() {
  
 
   return (
     <Router>
-    <div className='container-fluid flex'>
-      <h1>This is just for testing</h1>
-    
-    </div>
+    <Routes>
+      <Route path='/login' element={<Login/>} />
+    </Routes>
     </Router>
   )
 }

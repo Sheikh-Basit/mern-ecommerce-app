@@ -37,7 +37,7 @@ router.post(
       const existinguser = await User.findOne({ email });
       if (existinguser) {
         return res.send({
-          error: `Email already exist. Please enter the unique email address`,
+          error: `Email already exist!`,
         });
       }
 

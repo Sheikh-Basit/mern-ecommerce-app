@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {logout} from './Redux/loginSlice'
+import { logout } from './Redux/loginSlice'
 
 const UserDashboard = () => {
-  const {token} = useSelector(state => state.login)
+  const { token,} = useSelector(state => state.login)
   const dispatch = useDispatch();
+
   return (
     <div>
       <h1>This is User Dashboard</h1>

@@ -1,0 +1,26 @@
+{
+  "name": "mern-ecommerce-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && nodemon index.js",
+    "client": "npm run dev --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sheikh-Basit/mern-ecommerce-app.git"
+  },
+  "keywords": [],
+  "author": "Sheikh Abdul Basit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sheikh-Basit/mern-ecommerce-app/issues"
+  },
+  "homepage": "https://github.com/Sheikh-Basit/mern-ecommerce-app#readme",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

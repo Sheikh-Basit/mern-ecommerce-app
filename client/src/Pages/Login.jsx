@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from 'react'
+import { Link } from "react-router-dom";
 
 // Eye icon
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
@@ -9,18 +9,8 @@ import { loginUser} from '../Redux/loginSlice'
 
 const Login = () => {
     const dispatch = useDispatch();
-    const { loading, token, role } = useSelector(state => state.login);
-    const navigate = useNavigate();
-    
-    useEffect(() => {
-    if (token) {
-      if (role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/user/dashboard");
-      }
-    }
-  }, [token, role, navigate]);
+    const { loading } = useSelector(state => state.login);
+
 
     // Show and hide password
     const [showPassword, setShowPassword] = useState(false);
@@ -80,7 +70,7 @@ const Login = () => {
                             <label htmlFor="terms" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <Link to="/termandcondition" className="text-blue-600 hover:underline">terms and conditions</Link></label>
                         </div>
                         {/* Forgot Password */}
-                        <Link to='/forgotPassword' className='text-blue-600 font-semibold text-sm'>Forgot Password</Link>
+                        <Link to='/forgotPassword' className='text-blue-600 font-semibold text-sm hover:underline'>Forgot Password</Link>
                     </div>
 
                     {/* Login button */}

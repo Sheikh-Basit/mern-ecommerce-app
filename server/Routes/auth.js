@@ -166,14 +166,14 @@ router.delete("/admin/deleteUser/:id", fetchUser, isAdmin, async (req, res) => {
   try {
     // Find the user
     const user = await User.findById(req.params.id);
-    if(!user){
-      return res.status(404).json({error:"User not found"});
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
 
     //Find the admin user and protect from deletion
-    const adminUser = await User.findOne().sort({createdAt:1});
-    if(adminUser._id.toString() === req.params.id){
-      return res.status(403).json({error:"Admin cannot be deleted"})
+    const adminUser = await User.findOne().sort({ createdAt: 1 });
+    if (adminUser._id.toString() === req.params.id) {
+      return res.status(403).json({ error: "Admin cannot be deleted" })
     }
 
     // Delete the user
@@ -220,7 +220,7 @@ router.post(
       // TODO: Send `resetToken` to user via email (not hashed)
       res
         .status(200)
-        .json({ message: "Password reset token generated", resetToken });
+        .json({ message: "Reset link sent to email", resetToken });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

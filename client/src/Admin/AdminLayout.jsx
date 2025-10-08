@@ -23,15 +23,15 @@ const AdminLayout = () => {
   if (!user) return null;
 
   return (
-    <div className='flex'>
+    <div className='flex h-screen bg-gray-50'>
       <SideHeader />
-      <div className="main w-full">
+      <div className="w-full flex flex-col flex-1">
         <Header />
 
-        <main className='px-3'>
+        <main className='px-3 h-full overflow-y-auto'>
           <Outlet />
-
         </main>
+
 
       </div>
     </div >

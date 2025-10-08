@@ -11,7 +11,7 @@ import { CgLogOut } from "react-icons/cg";
 
 const SideHeader = () => {
   return (
-    <aside className='w-64 bg-gray-50 h-screen'>
+    <aside className='w-56 bg-gray-50 border-r border-r-gray-200'>
       
       <div className="logo p-4">
       <Logo/>

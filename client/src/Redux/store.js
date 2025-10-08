@@ -3,13 +3,15 @@ import loginSlice from './loginSlice';
 import signUpSlice from './signUpSlice'
 import alertSlice from './AlertSlice';
 import ForgotPasswordSlice from './ForgotPassword';
+import userDetailSlice from './userDetailSlice';
 
 const store = configureStore({
     reducer: {
         login: loginSlice,
         signup: signUpSlice,
         ForgotPassword: ForgotPasswordSlice,
-        alert: alertSlice
+        alert: alertSlice,
+        userDetail: userDetailSlice
     }
 })
 

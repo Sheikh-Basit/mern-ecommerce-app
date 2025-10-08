@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { sendEmail} from '../Redux/ForgotPassword.js'
+import Logo from '../Header/logo.jsx';
 
 const ForgotPassword = () => {
     const dispatch = useDispatch();
@@ -24,9 +25,7 @@ const ForgotPassword = () => {
     return (
         <div className='container p-8 mx-auto max-h-screen '>
             {/* Logo */}
-            <div className="">
-                <img src="image.png" alt="logo" className='h-full w-full object-contain' />
-            </div>
+            <Logo/>
 
             <div className="flex justify-center items-center max-w-md p-5 mt-16 mx-auto border border-gray-200">
                 <form className="w-full" onSubmit={handleSubmit}>

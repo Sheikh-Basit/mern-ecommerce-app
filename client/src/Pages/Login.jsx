@@ -1,15 +1,28 @@
-import React, { useState } from 'react'
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from "react-router-dom";
 
 // Eye icon
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser} from '../Redux/loginSlice'
+import { loginUser } from '../Redux/loginSlice'
+import Logo from '../Header/logo';
 
 const Login = () => {
     const dispatch = useDispatch();
-    const { loading } = useSelector(state => state.login);
+    const { loading, token, role, success } = useSelector(state => state.login);
+    const navigate = useNavigate();
+
+    // Redirect to the specific page when user is logged in
+    useEffect(() => {
+        if (success && token && role) {
+            if (role === "admin") {
+                navigate("/admin/dashboard");
+            } else if (role === "user") {
+                navigate("/user/dashboard");
+            }
+        }
+    }, [success, token, role, navigate]);
 
 
     // Show and hide password
@@ -27,15 +40,14 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(loginUser(formData))
+        setFormData({ email: "", password: "" })
     }
 
-    
+
     return (
         <div className='container p-8 mx-auto max-h-screen '>
             {/* Logo */}
-            <div className="">
-                <img src="image.png" alt="logo" className='h-full w-full object-contain'/>
-            </div>
+            <Logo/>
 
             <div className="flex justify-center items-center max-w-md p-5 mt-16 mx-auto border border-gray-200">
                 <form className="w-full" onSubmit={handleSubmit}>

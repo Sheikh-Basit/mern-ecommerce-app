@@ -4,7 +4,7 @@ import Login from './Pages/Login';
 import Alert from './components/Alert';
 import Signup from './Pages/Signup';
 import AdminDashboard from './Admin/AdminDashboard'
-import UserDashboard from './UserDashboard'
+import UserDashboard from './Pages/UserDashboard'
 import ProtectedRoute from './components/ProtectedRoute';
 import Unauthorized from './Pages/Unauthorized';
 import ForgotPassword from './Pages/ForgotPassword';

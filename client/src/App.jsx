@@ -3,11 +3,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Pages/Login';
 import Alert from './components/Alert';
 import Signup from './Pages/Signup';
-import AdminDashboard from './Admin/AdminDashboard'
+import AdminLayout from './Admin/AdminLayout'
 import UserDashboard from './Pages/UserDashboard'
 import ProtectedRoute from './components/ProtectedRoute';
 import Unauthorized from './Pages/Unauthorized';
 import ForgotPassword from './Pages/ForgotPassword';
+import Dashboard from './Admin/Dashboard';
+import Orders from './Admin/Orders';
 
 function App() {
 
@@ -27,7 +29,13 @@ function App() {
 
         {/* Admin Protected Route */}
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin" element={<AdminLayout />} >
+          <Route index element={<Dashboard />} />
+          <Route path="orders" element={<Orders />} />
+          {/* <Route path="users" element={<Users />} />
+          <Route path="products" element={<Products />} />
+          <Route path="settings" element={<Settings />} /> */}
+          </Route>
         </Route>
         {/* <Route path='/admin/dashboard' element={<AdminDashboard/>} />
       <Route path='/user/dashboard' element={<UserDashboard/>} /> */}

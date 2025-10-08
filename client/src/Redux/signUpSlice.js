@@ -5,7 +5,7 @@ import { showAlert } from './AlertSlice';
 // ===================== REGISTER USER =====================
 export const registerUser = createAsyncThunk(
   'auth/signup',
-  async ({ username, email, password }, { rejectWithValue, dispatch }) => {
+  async (formData, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.post('http://localhost:3000/auth/register',
         formData,

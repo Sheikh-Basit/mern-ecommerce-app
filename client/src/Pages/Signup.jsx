@@ -2,13 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import { FaRegEye, FaRegEyeSlash, FaUpload } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../Redux/signUpSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { showAlert } from "../Redux/AlertSlice";
 import Logo from "../Header/logo";
 
 const Signup = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.signup);
+  const navigate = useNavigate();
 
   // file input ref + file state + preview url
   const selectFile = useRef(null);
@@ -76,11 +77,12 @@ const Signup = () => {
     payload.append("email", formData.email);
     payload.append("password", formData.password);
     if (selectedFile) {
-      payload.append("profileImage", selectedFile);
+      payload.append("image", selectedFile);
     }
 
     // dispatch the thunk (your registerUser should accept FormData)
     dispatch(registerUser(payload));
+    navigate('/login')
   };
 
   return (

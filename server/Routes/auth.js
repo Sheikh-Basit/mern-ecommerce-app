@@ -8,8 +8,9 @@ import bcrypt from "bcrypt";
 // Import jwt for authentication
 import jwt from "jsonwebtoken";
 
-// import Middleware fetch user
+// import Middlewares
 import { fetchUser, isAdmin } from "../middleware/fetchUser.js";
+import { upload } from "../middleware/upload.js";
 
 // Import crypto to generate random hashedToken for forgot password
 import crypto from "crypto";
@@ -18,7 +19,7 @@ const router = express.Router();
 
 // 1 => Create new User using the post request: http://localhost:3000/auth/register
 router.post(
-  "/register",
+  "/register", upload.single('image'),
   [
     body("username").notEmpty().withMessage("User name must be enter"),
     body("email").isEmail().withMessage("Enter the correct Email Address"),
@@ -34,6 +35,7 @@ router.post(
       }
       const { username, email, password } = req.body;
 
+      // Check email is already exists?
       const existinguser = await User.findOne({ email });
       if (existinguser) {
         return res.send({
@@ -41,14 +43,19 @@ router.post(
         });
       }
 
+      // Hash the password
       const salt = 10;
       const hashpassword = await bcrypt.hash(password, salt);
+
+      // Save image path
+      const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
       const newUser = new User({
         username,
         email,
         password: hashpassword,
         role: "user",
+        image: imagePath
       });
       await newUser.save();
 

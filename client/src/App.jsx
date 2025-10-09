@@ -10,6 +10,7 @@ import Unauthorized from './Pages/Unauthorized';
 import ForgotPassword from './Pages/ForgotPassword';
 import Dashboard from './Admin/Dashboard';
 import Orders from './Admin/Orders';
+import Logout from './Admin/Logout';
 
 function App() {
 
@@ -32,8 +33,8 @@ function App() {
           <Route path="/admin" element={<AdminLayout />} >
           <Route index element={<Dashboard />} />
           <Route path="orders" element={<Orders />} />
-          {/* <Route path="users" element={<Users />} />
-          <Route path="products" element={<Products />} />
+          <Route path="logout" element={<Logout />} />
+           {/*<Route path="products" element={<Products />} />
           <Route path="settings" element={<Settings />} /> */}
           </Route>
         </Route>

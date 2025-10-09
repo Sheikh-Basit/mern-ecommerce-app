@@ -1,10 +1,20 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import React, {useEffect} from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { fetchDetail } from '../Redux/userDetailSlice'
 
 import { FaSearch } from "react-icons/fa";
 
 const Header = () => {
   const { user } = useSelector((state) => state.userDetail);
+  const dispatch = useDispatch();
+  
+ useEffect(()=>{
+    dispatch(fetchDetail())
+  }, [dispatch]);
+
+  if (!user) return null;
+
   return (
     <header className='flex items-center justify-between p-3 shadow'>
       <div className="relative w-full max-w-xl mr-6 focus-within:text-blue-500">

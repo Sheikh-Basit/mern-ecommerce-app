@@ -26,7 +26,7 @@ const SideHeader = () => {
       <hr className='my-5 text-gray-500'/>
       <NavLink to={'/admin/products'} className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`}><FaUser /> Profile</NavLink>
       <NavLink to={'/admin/products'} className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`}><IoMdSettings /> Settings</NavLink>
-      <NavLink to={'/admin/products'} className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`}><CgLogOut /> Logout</NavLink>
+      <NavLink to={'/admin/logout'} className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`}><CgLogOut /> Logout</NavLink>
 
       </nav>
 

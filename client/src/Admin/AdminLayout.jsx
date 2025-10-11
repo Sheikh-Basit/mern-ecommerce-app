@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector} from 'react-redux'
 
 import { fetchDetail } from '../Redux/userDetailSlice'
 import SideHeader from './SideHeader'
@@ -8,6 +8,11 @@ import { Outlet } from "react-router-dom";
 
 
 const AdminLayout = () => {
+  const dispatch = useDispatch();
+
+   useEffect(()=>{
+    dispatch(fetchDetail())
+  }, [dispatch]);
 
   return (
     <div className='flex h-screen bg-gray-50'>

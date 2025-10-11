@@ -11,6 +11,7 @@ import ForgotPassword from './Pages/ForgotPassword';
 import Dashboard from './Admin/Dashboard';
 import Orders from './Admin/Orders';
 import Logout from './Admin/Logout';
+import Products from './Admin/Products';
 
 function App() {
 
@@ -31,11 +32,11 @@ function App() {
         {/* Admin Protected Route */}
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route path="/admin" element={<AdminLayout />} >
-          <Route index element={<Dashboard />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="logout" element={<Logout />} />
-           {/*<Route path="products" element={<Products />} />
-          <Route path="settings" element={<Settings />} /> */}
+            <Route index element={<Dashboard />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="logout" element={<Logout />} />
+            <Route path="products" element={<Products />} />
+            {/* <Route path="settings" element={<Settings />} /> */}
           </Route>
         </Route>
         {/* <Route path='/admin/dashboard' element={<AdminDashboard/>} />

@@ -1,36 +1,68 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Logo from '../Header/logo'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 // import react icons
-import { FaHome, FaShoppingCart, FaUsers, FaUser, } from "react-icons/fa";
+import { FaHome, FaShoppingCart, FaUsers, FaUser, FaAngleUp, FaAngleDown} from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { BsChatSquareText } from "react-icons/bs";
 import { IoMdSettings } from "react-icons/io";
 import { CgLogOut } from "react-icons/cg";
 
 const SideHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
   return (
     <aside className='w-56 bg-gray-50 border-r border-r-gray-200'>
-      
+
+      {/* Logo */}
       <div className="logo p-4">
-      <Logo/>
+        <Logo />
       </div>
 
       <nav className="mt-3">
-      <NavLink to={'/admin'} end className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`} ><FaHome /> Dashboard</NavLink>
-      <NavLink to={'/admin/orders'} className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`}><FaShoppingCart /> Orders</NavLink>
-      <NavLink to={'/admin/products'} className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`}><TbTruckDelivery /> Products</NavLink>
-      <NavLink to={'/admin/products'} className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`}><FaUsers /> Users</NavLink>
-      <NavLink to={'/admin/products'} className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`}><BsChatSquareText /> Chats</NavLink>
-      <hr className='my-5 text-gray-500'/>
-      <NavLink to={'/admin/products'} className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`}><FaUser /> Profile</NavLink>
-      <NavLink to={'/admin/products'} className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`}><IoMdSettings /> Settings</NavLink>
-      <NavLink to={'/admin/logout'} className={`flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-3 hover:border-blue-500 ${({isActive}) => isActive ? "border-blue-500" : ""}`}><CgLogOut /> Logout</NavLink>
+        {/* Dashboard */}
+        <NavLink to={'/admin'} aria-label='Go to Dashboard' end className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`} ><FaHome /> Dashboard</NavLink>
+
+        {/* Orders */}
+        <NavLink to={'/admin/orders'} className={({ isActive }) => `active flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`}><FaShoppingCart /> Orders</NavLink>
+
+        {/* Products with dropdown */}
+        <div>
+          <button onClick={() => setIsOpen(!isOpen)} className={`flex items-center justify-between w-full gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${location.pathname.startsWith("/admin/products") ? "border-l-4 border-blue-500" : "text-gray-600"}`}>
+            <span className='flex items-center gap-4'><TbTruckDelivery /> Products </span>
+            <span>{isOpen? <FaAngleUp/> : <FaAngleDown/>}</span>
+            </button>
+
+          {/* Dropdown for add and all products */}
+          {isOpen && <div className='mx-6 px-3 inset-shadow-sm inset-shadow-gray-300 border-gray-200'>
+            <NavLink to={'/admin/products'} className={({ isActive }) => `flex items-center gap-4 py-1 hover:text-gray-800 ${isActive ? 'text-blue-500' : 'text-gray-500'}`}>All Products</NavLink>
+            <NavLink to={'/admin/products/add'} className={({ isActive }) => `flex items-center gap-4 py-1 hover:text-gray-800 ${isActive ? 'text-blue-500' : 'text-gray-500'}`} >Add Product</NavLink>
+
+          </div>
+          }
+        </div>
+
+        {/* Users */}
+        <NavLink to={'/admin/users'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`}><FaUsers /> Users</NavLink>
+
+        {/* Chats */}
+        <NavLink to={'/admin/chats'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`}><BsChatSquareText /> Chats</NavLink>
+
+        <hr className='my-5 text-gray-500' />
+
+        {/* Profile */}
+        <NavLink to={'/admin/profile'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`}><FaUser /> Profile</NavLink>
+
+        {/* Setting */}
+        <NavLink to={'/admin/setting'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`}><IoMdSettings /> Setting</NavLink>
+
+        {/* Logout */}
+        <NavLink to={'/admin/logout'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`}><CgLogOut /> Logout</NavLink>
 
       </nav>
 
-      
+
     </aside>
   )
 }

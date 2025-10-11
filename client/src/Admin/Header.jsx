@@ -1,17 +1,10 @@
 import React, {useEffect} from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-
-import { fetchDetail } from '../Redux/userDetailSlice'
+import { useSelector } from 'react-redux'
 
 import { FaSearch } from "react-icons/fa";
 
 const Header = () => {
   const { user } = useSelector((state) => state.userDetail);
-  const dispatch = useDispatch();
-  
- useEffect(()=>{
-    dispatch(fetchDetail())
-  }, [dispatch]);
 
   if (!user) return null;
 
@@ -22,7 +15,7 @@ const Header = () => {
           <FaSearch className='absolute top-1/2 left-2 -translate-y-1/2 text-sm'/>
           
           <input className="block w-full text-sm form-input leading-5 border border-gray-200 rounded focus:outline-none focus:border-blue-400 pl-8 py-2 text-gray-700" type="text" placeholder="Search for projects" aria-label="Search"/></div>
-      <div className='rounded-full w-10 h-10 bg-gray-100 overflow-hidden flex items-center justify-center'>
+      <div className='border border-gray-400 rounded-full w-10 h-10 bg-gray-100 overflow-hidden flex items-center justify-center'>
 
         {user.image ? (
           <img

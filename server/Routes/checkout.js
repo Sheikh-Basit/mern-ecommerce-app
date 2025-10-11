@@ -3,7 +3,7 @@ import { fetchUser } from "../middleware/fetchUser.js";
 import { body, validationResult } from "express-validator";
 import Cart from "../Models/Cart.js";
 import Checkout from "../Models/CheckOut.js";
-import Notification from "../Models/Notifications.js";
+import Orders from "../Models/Orders.js";
 const router = express.Router();
 
 // 1 => Get Checkout Detail using the POST request: http://localhost:3000/checkout/
@@ -82,11 +82,11 @@ router.post(
             // Save checkout
             await checkout.save();
 
-            // Create admin notification
-            await Notification.create({
+            // Create new Order
+            await Orders.create({
                 message: "New order placed",
-                user: userid,
-                checkoutId: checkout._id,
+                userDetail: userDetails,
+                checkoutDetail: cart.items,
                 status: "Pending",
             });
 

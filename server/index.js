@@ -7,7 +7,7 @@ import userRoutes from "./Routes/auth.js";
 import productRoutes from "./Routes/product.js";
 import cartRoutes from "./Routes/cart.js";
 import checkOutRoutes from "./Routes/checkout.js";
-import notificationRoutes from "./Routes/notification.js";
+import notificationRoutes from "./Routes/orders.js";
 
 
 dotenv.config();
@@ -28,7 +28,7 @@ app.use("/auth",userRoutes);
 app.use("/products",productRoutes);
 app.use("/cart",cartRoutes);
 app.use("/checkout",checkOutRoutes);
-app.use("/notification",notificationRoutes);
+app.use("/orders",notificationRoutes);
 
 
 // Server

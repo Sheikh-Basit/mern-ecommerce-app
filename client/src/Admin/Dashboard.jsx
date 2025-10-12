@@ -65,7 +65,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            <div className="w-full p-4">
+            <div className="w-full">
                 <h2 className="text-2xl font-bold mb-4">📊 Dashboard Analytics</h2>
                 <div className="bg-white rounded-lg shadow-lg p-4">
                     <ResponsiveContainer width="100%" height={300}>

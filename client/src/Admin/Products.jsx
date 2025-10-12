@@ -19,7 +19,7 @@ const Products = () => {
     <div>
       <Breadcrum title="All Products"/>
 
-      <div className="grid grid-cols-4 gap-3 my-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 my-6">
       { products.map((product, index) => (
         <div key={index} className="border border-gray-300 rounded">
           <img src={logo} alt="Dummy" className='w-full h-28 object-center'/>

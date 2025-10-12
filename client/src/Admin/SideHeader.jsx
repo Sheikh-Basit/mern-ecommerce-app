@@ -13,7 +13,7 @@ const SideHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   return (
-    <aside className='w-56 bg-gray-50 border-r border-r-gray-200'>
+    <div className='py-2'>
 
       {/* Logo */}
       <div className="logo p-4">
@@ -63,7 +63,7 @@ const SideHeader = () => {
       </nav>
 
 
-    </aside>
+    </div>
   )
 }
 

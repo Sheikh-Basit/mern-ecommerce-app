@@ -8,11 +8,10 @@ const Orders = () => {
   const dispatch = useDispatch();
   const { data: orders = [], loading, error } = useSelector((state) => state.order);
   const { user } = useSelector((state) => state.userDetail);
-  if (!user) return null;
 
   useEffect(() => {
     dispatch(fetchOrders());
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
@@ -55,11 +54,15 @@ const Orders = () => {
     date: new Date(order.createdAt).toLocaleDateString(),
   }));
 
+  if (!user) {
+    return <p className="text-gray-500 text-center py-10">Please log in to view your orders.</p>;
+  }
+
   if (loading) return <p>Loading orders...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="w-full h-auto">
+    <div >
       <Breadcrum title="Orders" />
       <DataGrid
         rows={rows}
@@ -67,7 +70,7 @@ const Orders = () => {
         pageSize={5}
         rowsPerPageOptions={[5, 10, 25]}
         disableSelectionOnClick
-        className="my-6"
+        className="my-6 !min-w-lg"
       />
     </div>
   );

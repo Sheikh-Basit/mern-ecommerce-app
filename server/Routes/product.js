@@ -4,6 +4,7 @@ import { body, validationResult } from "express-validator";
 
 // Import middleware to check the role of user
 import { fetchUser, isAdmin } from "../middleware/fetchUser.js";
+import { upload } from "../middleware/upload.js";
 const router = express.Router();
 
 // 1 => Get All Products using the GET request: http://localhost:3000/products/
@@ -19,40 +20,43 @@ router.get("/",fetchUser, async (req, res) => {
 
 // 2 => Add Product (Only admin) using the POST request: http://localhost:3000/products/addProduct
 router.post(
-  "/addProduct",
-  [
-    body("title").notEmpty().withMessage("Title must be required"),
-    body("description").optional(),
-    body("price").notEmpty().withMessage("Price is required"),
-    body("category").notEmpty().withMessage("Category must be required"),
-    body("stock").isNumeric().withMessage("Stock must be a number"),
-    body("imageUrl").optional().isURL().withMessage("Image URL must be valid"),
-  ],
+  "/addProduct",upload.single("productImage"),
   fetchUser,
   isAdmin,
+  [
+    body("name").notEmpty().withMessage("Product name must be required"),
+    body("price").notEmpty().withMessage("Price is required"),
+    body("description").optional(),
+    body("category").notEmpty().withMessage("Category must be required"),
+    body("stock").isNumeric().withMessage("Stock must be a number"),
+  ],
   async (req, res) => {
     try {
       const result = validationResult(req);
       if (!result.isEmpty()) {
         return res.status(400).json({ error: result.array() });
       }
-      const { title, description, price, category, stock, imageUrl } = req.body;
+      const { name, description, price, category, stock } = req.body;
       const userid = req.user.userID;
 
-      let product = await Product.findOne({ title });
+      let product = await Product.findOne({ name });
       if (product) {
         return res
           .status(400)
-          .json({ message: "Product already added with same title" });
+          .json({ message: "Product already added with same name" });
       }
+      // Save image path
+      const imagePath = req.file ? `/uploads/product/${req.file.filename}` : "";
+
+      // Create new Product and save in the DB
       product = new Product({
         user: userid,
-        title,
+        name,
         description,
         price,
         category,
         stock,
-        imageUrl,
+        image: imagePath,
       });
       product.save();
 

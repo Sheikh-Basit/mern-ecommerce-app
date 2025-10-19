@@ -2,25 +2,43 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 
-// Create the uploads folder if it doesn't exist
-const uploadDir = "uploads";
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
+// Upload directory
+const baseDir = "uploads";
+if (!fs.existsSync(baseDir)) {
+  fs.mkdirSync(baseDir);
 }
 
-// Storage settings
+// Dynamic storage destination
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads"); // save file in uploads folder
+    let folder = baseDir;
+
+    // If uploading user image
+    if (file.fieldname === "userImage") {
+      folder = path.join(baseDir, "user");
+    }
+
+    // If uploading product image
+    if (file.fieldname === "productImage") {
+      folder = path.join(baseDir, "product");
+    }
+
+    // Create folder if it doesn't exist
+    if (!fs.existsSync(folder)) {
+      fs.mkdirSync(folder, { recursive: true });
+    }
+
+    cb(null, folder);
   },
+
   filename: (req, file, cb) => {
-    const uniqueName = Date.now() + "-" + Math.round(Math.random() * 1E9);
+    const uniqueName = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
     cb(null, uniqueName + ext);
   }
 });
 
-// Optional: file type filter (images only)
+// Allow only image file types
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png|webp/;
   const ext = path.extname(file.originalname).toLowerCase();

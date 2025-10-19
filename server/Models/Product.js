@@ -3,12 +3,12 @@ const { Schema } = mongoose;
 
 const productSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "User" },
-  title: { type: String, required: true },
-  description: { type: String },
+  name: { type: String, required: true },
   price: { type: String, required: true },
-  category: { type: String, required: true },
   stock: { type: Number, default: 0 },
-  imageUrl: { type: String },
+  category: { type: String, required: true },
+  description: { type: String },
+  image: { type: String },
 },{timestamps:true});
 
 // Create Model

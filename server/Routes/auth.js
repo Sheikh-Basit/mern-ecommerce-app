@@ -19,13 +19,11 @@ const router = express.Router();
 
 // 1 => Create new User using the post request: http://localhost:3000/auth/register
 router.post(
-  "/register", upload.single('image'),
+  "/register", upload.single('userImage'),
   [
     body("username").notEmpty().withMessage("User name must be enter"),
     body("email").isEmail().withMessage("Enter the correct Email Address"),
-    body("password")
-      .isLength({ min: 5 })
-      .withMessage("Password must be atleast 5 character long"),
+    body("password").isLength({ min: 5 }).withMessage("Password must be atleast 5 character long"),
   ],
   async (req, res) => {
     try {
@@ -48,8 +46,9 @@ router.post(
       const hashpassword = await bcrypt.hash(password, salt);
 
       // Save image path
-      const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+      const imagePath = req.file ? `/uploads/user/${req.file.filename}` : null;
 
+      // Create new User and save in the DB
       const newUser = new User({
         username,
         email,

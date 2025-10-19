@@ -12,7 +12,7 @@ export const registerUser = createAsyncThunk(
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
 
-      // ✅ Success or error message handling
+      // Success or error message handling
       if (response.data?.message) {
         dispatch(showAlert({ message: response.data.message, type: 'success' }));
       }
@@ -22,7 +22,7 @@ export const registerUser = createAsyncThunk(
         return rejectWithValue(response.data.error);
       }
 
-      // ✅ Return response data for reducer
+      // Return response data for reducer
       return response.data;
 
     } catch (error) {

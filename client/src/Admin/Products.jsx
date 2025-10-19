@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import Breadcrum from './Breadcrum'
 
-import logo from '../assets/logo.png'
 import { fetchProducts } from '../Redux/FetchProdctSlice';
 import { useDispatch, useSelector } from 'react-redux';
 

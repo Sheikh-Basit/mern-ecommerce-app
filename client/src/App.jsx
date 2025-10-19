@@ -13,6 +13,8 @@ import Orders from './Admin/Orders';
 import Logout from './Admin/Logout';
 import Products from './Admin/Products';
 import AddProduct from './Admin/AddProduct';
+import Users from './Admin/Users';
+import Profile from './Admin/Profile';
 
 function App() {
 
@@ -38,6 +40,8 @@ function App() {
             <Route path="logout" element={<Logout />} />
             <Route path="products" element={<Products />} />
             <Route path="add-product" element={<AddProduct />} />
+            <Route path="users" element={<Users />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
         </Route>
         {/* <Route path='/admin/dashboard' element={<AdminDashboard/>} />

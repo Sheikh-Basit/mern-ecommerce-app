@@ -3,6 +3,7 @@ import loginSlice from './loginSlice';
 import signUpSlice from './signUpSlice'
 import alertSlice from './AlertSlice';
 import ForgotPasswordSlice from './ForgotPassword';
+import usersSlice from './usersSlice';
 import userDetailSlice from './userDetailSlice';
 import ordersSlice from './OrderSlice';
 import productSlice from './FetchProdctSlice';
@@ -14,6 +15,7 @@ const store = configureStore({
         signup: signUpSlice,
         ForgotPassword: ForgotPasswordSlice,
         alert: alertSlice,
+        users: usersSlice,
         userDetail: userDetailSlice,
         order: ordersSlice,
         products: productSlice,

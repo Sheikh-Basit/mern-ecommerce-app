@@ -62,16 +62,18 @@ const Orders = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div >
+    <div className="container px-6 mx-auto">
       <Breadcrum title="Orders" />
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5, 10, 25]}
-        disableSelectionOnClick
-        className="my-6 !min-w-lg"
-      />
+      <div className="min-w-md my-6">
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5, 10, 25]}
+          disableSelectionOnClick
+          
+        />
+      </div>
     </div>
   );
 };

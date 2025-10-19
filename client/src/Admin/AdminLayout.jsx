@@ -23,7 +23,7 @@ const AdminLayout = () => {
       <div className="flex flex-col flex-1 w-full">
         <Header ToggleButton={()=>setIsOpenHeader(!isOpenHeader)}/>
 
-        <main className='px-3 h-full overflow-auto'>
+        <main className='h-full overflow-auto'>
           <Outlet />
         </main>
 

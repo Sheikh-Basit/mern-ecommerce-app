@@ -6,6 +6,7 @@ import ForgotPasswordSlice from './ForgotPassword';
 import userDetailSlice from './userDetailSlice';
 import ordersSlice from './OrderSlice';
 import productSlice from './FetchProdctSlice';
+import addProductSlice from './AddProductSlice';
 
 const store = configureStore({
     reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
         alert: alertSlice,
         userDetail: userDetailSlice,
         order: ordersSlice,
-        products: productSlice
+        products: productSlice,
+        addProduct: addProductSlice
     }
 })
 

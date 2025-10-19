@@ -37,7 +37,7 @@ const SideHeader = () => {
           {/* Dropdown for add and all products */}
           {isOpen && <div className='mx-6 px-3 inset-shadow-sm inset-shadow-gray-300 border-gray-200'>
             <NavLink to={'/admin/products'} className={({ isActive }) => `flex items-center gap-4 py-1 hover:text-gray-800 ${isActive ? 'text-blue-500' : 'text-gray-500'}`}>All Products</NavLink>
-            <NavLink to={'/admin/products/add'} className={({ isActive }) => `flex items-center gap-4 py-1 hover:text-gray-800 ${isActive ? 'text-blue-500' : 'text-gray-500'}`} >Add Product</NavLink>
+            <NavLink to={'/admin/add-product'} className={({ isActive }) => `flex items-center gap-4 py-1 hover:text-gray-800 ${isActive ? 'text-blue-500' : 'text-gray-500'}`} >Add Product</NavLink>
 
           </div>
           }

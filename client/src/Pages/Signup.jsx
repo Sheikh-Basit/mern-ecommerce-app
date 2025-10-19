@@ -77,10 +77,9 @@ const Signup = () => {
     payload.append("email", formData.email);
     payload.append("password", formData.password);
     if (selectedFile) {
-      payload.append("image", selectedFile);
+      payload.append("userImage", selectedFile);
     }
 
-    // dispatch the thunk (your registerUser should accept FormData)
     dispatch(registerUser(payload));
     navigate('/login')
   };
@@ -102,7 +101,7 @@ const Signup = () => {
               <input
                 type="file"
                 accept="image/*"
-                name="selectFile"
+                name="userImage"
                 onChange={handleFileChange}
                 hidden
                 ref={selectFile}

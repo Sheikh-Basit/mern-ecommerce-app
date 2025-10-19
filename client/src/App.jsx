@@ -12,6 +12,7 @@ import Dashboard from './Admin/Dashboard';
 import Orders from './Admin/Orders';
 import Logout from './Admin/Logout';
 import Products from './Admin/Products';
+import AddProduct from './Admin/AddProduct';
 
 function App() {
 
@@ -36,7 +37,7 @@ function App() {
             <Route path="orders" element={<Orders />} />
             <Route path="logout" element={<Logout />} />
             <Route path="products" element={<Products />} />
-            {/* <Route path="settings" element={<Settings />} /> */}
+            <Route path="add-product" element={<AddProduct />} />
           </Route>
         </Route>
         {/* <Route path='/admin/dashboard' element={<AdminDashboard/>} />

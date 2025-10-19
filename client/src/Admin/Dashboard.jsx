@@ -17,7 +17,7 @@ const Dashboard = () => {
     ];
 
     return (
-        <div className='container grid'>
+        <div className='container px-6 mx-auto grid'>
             <h1 className="text-2xl font-semibold my-4">Dashboard</h1>
             <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
                 <div className="min-w-0 rounded-lg shadow overflow-hidden bg-white">

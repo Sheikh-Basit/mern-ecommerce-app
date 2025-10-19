@@ -28,9 +28,7 @@ const Alert = () => {
   };
 
   return (
-    <div
-      className={`fixed top-4 left-1/2 -translate-x-1/2 px-4 py-3 rounded shadow-md ${alertStyles[type]}`}
-    >
+    <div className={`fixed top-4 left-1/2 -translate-x-1/2 px-4 py-3 rounded shadow-md z-50 ${alertStyles[type]}`}>
       <span>{message}</span>
     </div>
   );

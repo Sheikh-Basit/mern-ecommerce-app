@@ -36,6 +36,7 @@ const Profile = () => {
 
         // create preview url
         const url = URL.createObjectURL(file);
+        console.log(url)
         setPreviewUrl(url);
     };
 
@@ -66,6 +67,7 @@ const Profile = () => {
         }
 
         dispatch(updateUser(payload));
+        setFormEdit(true)
     };
     return (
         <div className="container px-6 mx-auto">

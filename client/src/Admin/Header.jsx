@@ -30,7 +30,7 @@ const Header = ({ ToggleButton }) => {
             <img
               src={`http://localhost:3000${user.image}`}
               alt="Profile"
-              className="w-24 h-24 rounded-full border"
+              className="w-10 h-10 rounded-full border object-cover"
             />
           ) : (
             <span className="text-xl text-gray-600 uppercase">

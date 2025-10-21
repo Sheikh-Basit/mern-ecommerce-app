@@ -15,6 +15,9 @@ import { upload } from "../middleware/upload.js";
 // Import crypto to generate random hashedToken for forgot password
 import crypto from "crypto";
 
+import path from "path";
+import fs from 'fs';
+
 const router = express.Router();
 
 // 1 => Create new User using the post request: http://localhost:3000/auth/register
@@ -134,13 +137,13 @@ router.get("/admin/users", fetchUser, isAdmin, async (req, res) => {
 });
 
 // 5 => Update User using the GET request: http://localhost:3000/auth/updateUser
-router.put("/updateUser", fetchUser, async (req, res) => {
+router.put("/updateUser", fetchUser, upload.single("userImage"), async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const newUser = {};
-    if (username) {
-      newUser.username = username;
-    }
+
+    if (username) newUser.username = username;
+
     if (email) {
       const existinguser = await User.findOne({ email });
       if (existinguser && existinguser._id.toString() !== req.user.userID) {
@@ -148,21 +151,48 @@ router.put("/updateUser", fetchUser, async (req, res) => {
           error: `Email already exist! Please enter the unique email address`,
         });
       }
-
       newUser.email = email;
     }
+
     if (password) {
       const salt = 10;
       newUser.password = await bcrypt.hash(password, salt);
     }
 
+    // Handle profile image
+    if (req.file) {
+      // find current user
+      const currentUser = await User.findById(req.user.userID);
+
+      console.log("Current user image:", currentUser.image);
+
+      if (currentUser.image) {
+        // check file exist
+        const oldImagePath = path.join(process.cwd(), currentUser.image);
+
+        if (fs.existsSync(oldImagePath)) {
+          try {
+            fs.unlinkSync(oldImagePath);
+            console.log("🗑️ Old image deleted:", oldImagePath);
+          } catch (unlinkErr) {
+            console.error("Failed to delete old image:", unlinkErr);
+          }
+        }
+      }
+      // 4. Save new image path
+      newUser.image = `/uploads/user/${req.file.filename}`;
+    }
+
+    // Update user
     const updatedUser = await User.findByIdAndUpdate(
       req.user.userID,
       { $set: newUser },
       { new: true }
     ).select("-password");
+
     res.json({ message: "Profile Updated", user: updatedUser });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 });

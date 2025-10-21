@@ -15,8 +15,10 @@ export const fetchUsers = createAsyncThunk('/auth/fetchUsers', async () => {
 //Update user
 export const updateUser = createAsyncThunk('/auth/updateUser',
   async (formData , { rejectWithValue, dispatch }) => {
+
+    console.log(formData);
     try {
-      const res = await axios.put('http://localhost:3000/auth/updateUser', formData, {
+      const response = await axios.put('http://localhost:3000/auth/updateUser', formData, {
         headers: {
           authToken: localStorage.getItem('token')
         }
@@ -30,7 +32,7 @@ export const updateUser = createAsyncThunk('/auth/updateUser',
         dispatch(showAlert({ message: `Error! ${response.data.error}`, type: 'error' }));
         return rejectWithValue(response.data.error);
       }
-      return res.data;
+      return response.data;
 
     } catch (error) {
       dispatch(showAlert({ message: `Error! ${error.message}`, type: "error", }));

@@ -23,7 +23,7 @@ export const fetchDetail = createAsyncThunk(
 const userDetailSlice = createSlice({
     name: "profile",
     initialState: {
-        user: null,
+        user: localStorage.getItem('user'),
         loading: false,
         error: null,
     },
@@ -36,6 +36,7 @@ const userDetailSlice = createSlice({
             .addCase(fetchDetail.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload;
+                localStorage.setItem('user', JSON.stringify(action.payload));
                 
             })
             .addCase(fetchDetail.rejected, (state, action) => {

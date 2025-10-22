@@ -4,13 +4,34 @@ import { showAlert } from './AlertSlice';
 
 // Fetch all users
 export const fetchUsers = createAsyncThunk('/auth/fetchUsers', async () => {
-  const res = await axios.get('http://localhost:3000/auth/admin/users', {
+  const response = await axios.get('http://localhost:3000/auth/admin/users', {
     headers: {
       authToken: localStorage.getItem('token')
     }
   });
-  return res.data;
+  return response.data;
 });
+
+// Fetch User Detail
+export const userDetail = createAsyncThunk(
+    "auth/userDetail",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get('http://localhost:3000/auth/getUser', {
+                headers: {
+                    authToken: localStorage.getItem('token')
+                }
+            });
+            console.log(response.data)
+
+            return response.data;
+
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.error || "Failed to fetch profile");
+        }
+    }
+)
+
 
 //Update user
 export const updateUser = createAsyncThunk('/auth/updateUser',

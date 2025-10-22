@@ -65,6 +65,7 @@ const loginSlice = createSlice({
       state.role = null;
       state.success = false;
       localStorage.removeItem("token");
+      localStorage.removeItem('user');
     },
   },
   extraReducers: (builder) => {

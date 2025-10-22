@@ -87,6 +87,8 @@ const Users = () => {
         date: new Date(user.createdAt).toLocaleDateString(),
     }));
 
+    
+
 
 
     if (loading) return <p>Loading users...</p>;
@@ -95,20 +97,23 @@ const Users = () => {
     return (
         <div className="container px-6 mx-auto">
             <Breadcrum title="Users" />
-            <div className="min-w-md my-6">
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    disableSelectionOnClick
+            {rows ?
+                <div className="min-w-md my-6">
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        pageSize={5}
+                        rowsPerPageOptions={[5, 10, 25]}
+                        disableSelectionOnClick
 
-                />
-            </div>
+                    />
+                </div> :
+                <p>User not Found!</p>
+            }
 
             {/* Modal for Delete User */}
             {isOpenModal && <div className="fixed top-0 left-0 w-full h-full z-50">
-                <div className="overlay absolute top-0 left-0 w-full h-full bg-black opacity-50" onClick={()=> setIsOpenModal(false)}></div>
+                <div className="overlay absolute top-0 left-0 w-full h-full bg-black opacity-50" onClick={() => setIsOpenModal(false)}></div>
 
                 {/* Modal*/}
                 <div className="absolute top-5 left-1/2 -translate-x-1/2 p-5 bg-white rounded-md">
@@ -121,7 +126,7 @@ const Users = () => {
                             <h4 className="mb-2 text-xl font-semibold">Delete User</h4>
                             <p>Are you sure you want to delete this user? All of data will be permanently removed. This action cannot be undone.</p>
                             <div className="flex justify-end gap-2 mt-5">
-                                <button className="rounded-sm px-3 py-1 bg-gray-200 text-gray-600" onClick={()=> setIsOpenModal(false)}>Cancel</button>
+                                <button className="rounded-sm px-3 py-1 bg-gray-200 text-gray-600" onClick={() => setIsOpenModal(false)}>Cancel</button>
                                 <button className="rounded-sm px-3 py-1 bg-red-200 text-red-600" onClick={() => handleDelete(isOpenModal)}>Delete</button>
                             </div>
                         </div>

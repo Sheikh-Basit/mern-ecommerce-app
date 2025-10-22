@@ -1,11 +1,17 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { FaSearch } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { fetchDetail } from '../Redux/userDetailSlice';
 
 const Header = ({ ToggleButton }) => {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userDetail);
+
+  useEffect(() => {
+    dispatch(fetchDetail())
+  }, [dispatch]);
 
   if (!user) return null;
 
@@ -13,7 +19,7 @@ const Header = ({ ToggleButton }) => {
     <header className='py-4 shadow-sm z-40 bg-white'>
       <div className="container px-6 mx-auto flex items-center justify-between gap-5 h-full text-blue-500 ">
 
-        <button className='p-1 rounded lg:hidden focus:outline focus:outline-blue-500' aria-label='Menu' onClick={ToggleButton}>
+        <button className='p-1 rounded md:hidden focus:outline focus:outline-blue-500' aria-label='Menu' onClick={ToggleButton}>
           <GiHamburgerMenu className='w-6 h-6' />
         </button>
         <div className="flex flex-1 md:mr-32">

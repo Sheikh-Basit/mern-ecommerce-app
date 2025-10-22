@@ -7,11 +7,11 @@ import { DataGrid } from "@mui/x-data-grid";
 const Orders = () => {
   const dispatch = useDispatch();
   const { data: orders = [], loading, error } = useSelector((state) => state.order);
-  const { user } = useSelector((state) => state.userDetail);
+  const { data: users = [] } = useSelector((state) => state.users);
 
   useEffect(() => {
     dispatch(fetchOrders());
-  }, [dispatch, user]);
+  }, [dispatch]);
 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
@@ -21,15 +21,15 @@ const Orders = () => {
         <div className="flex items-center gap-3">
           <div className='rounded-full w-10 h-10 border border-gray-400 bg-gray-100 overflow-hidden flex items-center justify-center'>
 
-            {user.image ? (
+            {params.row.image ? (
               <img
-                src={`http://localhost:3000${user.image}`}
+                src={`http://localhost:3000${params.row.image}`}
                 alt="Profile"
                 className="w-10 h-10 rounded-full object-cover"
               />
             ) : (
               <span className="text-xl text-gray-600 uppercase">
-                {user.username ? user.username[0] : "U"}
+                {params.row.clientName ? params.row.clientName[0] : "U"}
               </span>
             )}
           </div>
@@ -43,20 +43,21 @@ const Orders = () => {
     { field: "date", headerName: "Date", flex: 1 },
   ];
 
-
-
-  const rows = orders.map((order, index) => ({
-    id: index + 1,
-    clientName: order.userDetail?.fullName || "N/A",
-    orderId: order._id || "N/A",
-    amount: order.checkoutDetail[0]?.totalPrice || 0,
-    status: order.checkoutDetail?.status || "Pending",
-    date: new Date(order.createdAt).toLocaleDateString(),
-  }));
-
-  if (!user) {
-    return <p className="text-gray-500 text-center py-10">Please log in to view your orders.</p>;
-  }
+  
+  
+  const rows = orders.map((order, index) => {
+    // find the user who placed order
+    const matchedUser = users.find(u => u.email === order.userDetail?.email);
+    return {
+      id: index + 1,
+      image: matchedUser?.image || null,
+      clientName: order.userDetail?.fullName || "N/A",
+      orderId: order._id || "N/A",
+      amount: order.checkoutDetail[0]?.totalPrice || 0,
+      status: order.checkoutDetail?.status || "Pending",
+      date: new Date(order.createdAt).toLocaleDateString(),
+    }
+  });
 
   if (loading) return <p>Loading orders...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -64,14 +65,14 @@ const Orders = () => {
   return (
     <div className="container px-6 mx-auto">
       <Breadcrum title="Orders" />
-      <div className="min-w-md my-6">
+      <div className="min-w-lg my-6 pr-6 sm:pr-0">
         <DataGrid
           rows={rows}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5, 10, 25]}
           disableSelectionOnClick
-          
+
         />
       </div>
     </div>

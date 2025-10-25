@@ -1,13 +1,28 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 // import react icons
 import { FaShoppingCart, FaUsers, } from "react-icons/fa";
-import { BsChatSquareText } from "react-icons/bs";
 import { GrCurrency } from "react-icons/gr";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOrders } from '../Redux/OrderSlice';
+import { fetchUsers } from '../Redux/usersSlice';
 
 
 const Dashboard = () => {
+    const dispatch = useDispatch();
+    const { data: users = []} = useSelector((state) => state.users);
+    const { data: orders = []} = useSelector((state) => state.order);
+
+   const pendingOrders = orders.filter(pending => pending.status === "Pending")
+   const completedOrders = orders.filter(pending => pending.status === "Completed")
+
+     useEffect(() => {
+       dispatch(fetchOrders());
+       dispatch(fetchUsers());
+     }, [dispatch]);
+
+    
 
     const data = [
         { name: 'Jan', users: 20, orders: 10 },
@@ -27,7 +42,7 @@ const Dashboard = () => {
                         </div>
                         <div>
                             <p className="mb-1 text-sm font-medium">Total customers</p>
-                            <p className="text-lg font-semibold text-gray-700">765</p>
+                            <p className="text-lg font-semibold text-gray-700">{users.length}</p>
                         </div>
                     </div>
                 </div>
@@ -44,22 +59,23 @@ const Dashboard = () => {
                 </div>
                 <div className="min-w-0 rounded-lg shadow overflow-hidden bg-white">
                     <div className="p-4 flex items-center">
-                        <div className="p-3 rounded-full text-blue-500 bg-blue-100 mr-4">
+                        <div className="p-3 rounded-full text-yellow-500 bg-yellow-100 mr-4">
                             <FaShoppingCart />
                         </div>
                         <div>
-                            <p className="mb-1 text-sm font-medium text-gray-600">New Orders</p>
-                            <p className="text-lg font-semibold text-gray-700">150</p>
+                            <p className="mb-1 text-sm font-medium text-gray-600">Pending Orders</p>
+                            <p className="text-lg font-semibold text-gray-700">{pendingOrders.length}</p>
                         </div>
                     </div>
                 </div>
                 <div className="min-w-0 rounded-lg shadow overflow-hidden bg-white">
                     <div className="p-4 flex items-center">
                         <div className="p-3 rounded-full text-teal-500 bg-teal-100 mr-4">
-                            <BsChatSquareText />
+                            <FaShoppingCart />
                         </div>
                         <div>
-                            <p className="mb-1 text-sm font-medium text-gray-600">Unread Chats</p><p className="text-lg font-semibold text-gray-700">15</p>
+                            <p className="mb-1 text-sm font-medium text-gray-600">Completed Orders</p>
+                            <p className="text-lg font-semibold text-gray-700">{completedOrders.length}</p>
                         </div>
                     </div>
                 </div>

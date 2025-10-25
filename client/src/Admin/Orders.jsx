@@ -1,13 +1,18 @@
 import React, { useEffect } from "react";
 import Breadcrum from "./Breadcrum";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrders } from "../Redux/OrderSlice";
+import { fetchOrders, updateOrderStatus } from "../Redux/OrderSlice";
 import { DataGrid } from "@mui/x-data-grid";
+import { FaCheck } from "react-icons/fa";
 
 const Orders = () => {
   const dispatch = useDispatch();
   const { data: orders = [], loading, error } = useSelector((state) => state.order);
   const { data: users = [] } = useSelector((state) => state.users);
+
+   const handleStatusChange = (orderId, status) => {
+    dispatch(updateOrderStatus({ orderId, status }));
+  };
 
   useEffect(() => {
     dispatch(fetchOrders());
@@ -41,10 +46,29 @@ const Orders = () => {
     { field: "amount", headerName: "Amount (PKR)", flex: 1 },
     { field: "status", headerName: "Status", flex: 1 },
     { field: "date", headerName: "Date", flex: 1 },
+    {
+      field: "action", headerName: "Actions", flex: 0.8,
+      renderCell: (params) => {
+        return (
+          <div className="flex items-center justify-center h-full gap-2 px-2">
+            <button onClick={() => handleStatusChange(params.row.orderId, "Completed")} className="cursor-pointer rounded-sm border border-blue-600 text-blue-600 p-1 hover:bg-blue-600 hover:text-white leading-5" title="Edit" >
+              <FaCheck className="text-xl" />
+
+            </button>
+
+            <button onClick={() => handleStatusChange(params.row.orderId, "Cancelled")} className="cursor-pointer rounded-sm border border-red-600 text-red-600 p-1 hover:bg-red-600 hover:text-white leading-5" title="Delete" >
+              {/* <FaCancel className="text-xl" /> */} ❌
+            </button>
+
+
+          </div>
+        )
+      }
+    },
   ];
 
-  
-  
+
+
   const rows = orders.map((order, index) => {
     // find the user who placed order
     const matchedUser = users.find(u => u.email === order.userDetail?.email);
@@ -54,7 +78,7 @@ const Orders = () => {
       clientName: order.userDetail?.fullName || "N/A",
       orderId: order._id || "N/A",
       amount: order.checkoutDetail[0]?.totalPrice || 0,
-      status: order.checkoutDetail?.status || "Pending",
+      status: order.status,
       date: new Date(order.createdAt).toLocaleDateString(),
     }
   });

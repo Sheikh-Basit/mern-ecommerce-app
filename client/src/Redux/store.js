@@ -8,6 +8,7 @@ import userDetailSlice from './userDetailSlice';
 import ordersSlice from './OrderSlice';
 import productSlice from './FetchProdctSlice';
 import addProductSlice from './AddProductSlice';
+import ModalSlice from './ModalSlice';
 
 const store = configureStore({
     reducer: {
@@ -19,7 +20,8 @@ const store = configureStore({
         userDetail: userDetailSlice,
         order: ordersSlice,
         products: productSlice,
-        addProduct: addProductSlice
+        addProduct: addProductSlice,
+        modal: ModalSlice
     }
 })
 

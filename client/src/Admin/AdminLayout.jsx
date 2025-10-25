@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import SideHeader from './SideHeader'
 import Header from './Header'
 import { Outlet } from "react-router-dom";
+import Modal from './Modal';
 
 
 const AdminLayout = () => {
@@ -20,6 +21,7 @@ const AdminLayout = () => {
           <Outlet />
         </main>
 
+      <Modal/>
 
       </div>
     </div >

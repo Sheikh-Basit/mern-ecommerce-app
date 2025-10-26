@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Breadcrum from './Breadcrum'
-
+import Spinner from '../components/Spinner'
 import { fetchProducts } from '../Redux/FetchProdctSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -12,7 +12,7 @@ const Products = () => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  if (loading) return <p>Loading orders...</p>;
+  if (loading) return <Spinner />;
   if (error) return <p>Error: {error}</p>;
   return (
     <div>

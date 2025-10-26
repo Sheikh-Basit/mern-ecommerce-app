@@ -3,6 +3,7 @@ import Breadcrum from "./Breadcrum";
 import { useDispatch, useSelector } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
 import { fetchUsers } from "../Redux/usersSlice";
+import Spinner from "../components/Spinner"
 
 // Edit and Delete Icons
 import { FaEye } from "react-icons/fa";
@@ -50,14 +51,9 @@ const Users = () => {
             renderCell: (params) => {
                 return (
                     <div className="flex items-center justify-center h-full gap-2 px-2">
-                        <button className="cursor-pointer rounded-sm border border-blue-600 text-blue-600 p-1 hover:bg-blue-600 hover:text-white" title="Edit" >
-                            <FaEye className="text-xl" />
+                        <button onClick={() => dispatch(openModal({type: "userDetail", data: {id: params.row._id}}))} className="cursor-pointer rounded-sm border border-blue-600 text-blue-600 p-1 hover:bg-blue-600 hover:text-white" title="Edit" ><FaEye className="text-xl" /></button>
 
-                        </button>
-
-                        <button onClick={() => dispatch(openModal({type: "deleteUser", data: {id: params.row._id}}))} className="cursor-pointer rounded-sm border border-red-600 text-red-600 p-1 hover:bg-red-600 hover:text-white" title="Delete" >
-                            <MdDelete className="text-xl" />
-                        </button>
+                        <button onClick={() => dispatch(openModal({type: "deleteUser", data: {id: params.row._id}}))} className="cursor-pointer rounded-sm border border-red-600 text-red-600 p-1 hover:bg-red-600 hover:text-white" title="Delete" ><MdDelete className="text-xl" /></button>
 
 
                     </div>
@@ -81,7 +77,7 @@ const Users = () => {
 
 
 
-    if (loading) return <p>Loading users...</p>;
+    if (loading) return <Spinner />;
     if (error) return <p>Error: {error}</p>;
 
     return (

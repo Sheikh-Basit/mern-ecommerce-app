@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import SideHeader from './SideHeader'
 import Header from './Header'
 import { Outlet } from "react-router-dom";
-import Modal from './Modal';
+import Modal from '../components/Modal';
 
 
 const AdminLayout = () => {

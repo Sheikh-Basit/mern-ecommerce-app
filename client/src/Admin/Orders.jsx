@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders, updateOrderStatus } from "../Redux/OrderSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import { FaCheck } from "react-icons/fa";
+import Spinner from "../components/Spinner";
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -83,7 +84,7 @@ const Orders = () => {
     }
   });
 
-  if (loading) return <p>Loading orders...</p>;
+  if (loading) return <Spinner />;
   if (error) return <p>Error: {error}</p>;
 
   return (

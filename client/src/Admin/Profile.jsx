@@ -105,29 +105,14 @@ const Profile = () => {
 
                         {/* Select image */}
                         <div className="image relative">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                name="userImage"
-                                onChange={handleFileChange}
-                                hidden
-                                ref={selectFile}
-                            />
+                            <input type="file" accept="image/*" name="userImage" onChange={handleFileChange} hidden ref={selectFile} />
 
                             {/* preview or placeholder */}
                             <div className="rounded-full w-20 h-20 bg-gray-100 overflow-hidden flex items-center justify-center">
                                 {previewUrl ? (
-                                    <img
-                                        src={previewUrl}
-                                        alt="preview"
-                                        className="w-full h-full object-cover"
-                                    />
+                                    <img src={previewUrl} alt="preview" className="w-full h-full object-cover" />
                                 ) : user.image ? (
-                                    <img
-                                        src={`http://localhost:3000${user.image}`}
-                                        alt="profile"
-                                        className="w-full h-full object-cover"
-                                    />
+                                    <img src={`http://localhost:3000${user.image}`} alt="profile" className="w-full h-full object-cover" />
                                 ) : (
                                     <span className="text-xl text-gray-600 uppercase">
                                         {formData.username ? formData.username[0] : "U"}

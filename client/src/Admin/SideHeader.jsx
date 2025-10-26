@@ -27,14 +27,14 @@ const SideHeader = () => {
 
       <nav className="mt-3">
         {/* Dashboard */}
-        <NavLink to={'/admin'} aria-label='Go to Dashboard' end className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`} ><FaHome /> Dashboard</NavLink>
+        <NavLink to={'/admin'} aria-label='Go to Dashboard' end className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 border-l-4 hover:border-blue-500 ${isActive ? 'border-blue-500 text-gray-800' : 'text-gray-500 border-transparent'}`} ><FaHome /> Dashboard</NavLink>
 
         {/* Orders */}
-        <NavLink to={'/admin/orders'} className={({ isActive }) => `active flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`}><FaShoppingCart /> Orders</NavLink>
+        <NavLink to={'/admin/orders'} className={({ isActive }) => `active flex items-center gap-4 px-6 py-3 hover:text-gray-800 border-l-4  hover:border-blue-500 ${isActive ? 'border-blue-500 text-gray-800' : 'text-gray-500 border-transparent'}`}><FaShoppingCart /> Orders</NavLink>
 
         {/* Products with dropdown */}
         <div>
-          <button onClick={() => setIsOpen(!isOpen)} className={`flex items-center justify-between w-full gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${location.pathname.startsWith("/admin/products") || location.pathname.startsWith("/admin/add-product") ? "border-l-4 border-blue-500" : "text-gray-600"}`}>
+          <button onClick={() => setIsOpen(!isOpen)} className={`flex items-center justify-between w-full gap-4 px-6 py-3 hover:text-gray-800 border-l-4 hover:border-blue-500 ${location.pathname.startsWith("/admin/products") || location.pathname.startsWith("/admin/add-product") ? "border-blue-500" : "text-gray-500 border-transparent"}`}>
             <span className='flex items-center gap-4'><TbTruckDelivery /> Products </span>
             <span>{isOpen? <FaAngleUp/> : <FaAngleDown/>}</span>
             </button>
@@ -49,21 +49,21 @@ const SideHeader = () => {
         </div>
 
         {/* Users */}
-        <NavLink to={'/admin/users'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`}><FaUsers /> Users</NavLink>
+        <NavLink to={'/admin/users'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 border-l-4 hover:border-blue-500 ${isActive ? 'border-blue-500 text-gray-800' : 'text-gray-500 border-transparent'}`}><FaUsers /> Users</NavLink>
 
         {/* Chats */}
-        <NavLink to={'/admin/chats'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`}><BsChatSquareText /> Chats</NavLink>
+        <NavLink to={'/admin/chats'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 border-l-4 hover:border-blue-500 ${isActive ? 'border-blue-500 text-gray-800' : 'text-gray-500 border-transparent'}`}><BsChatSquareText /> Chats</NavLink>
 
         <hr className='my-5 text-gray-500' />
 
         {/* Profile */}
-        <NavLink to={'/admin/profile'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`}><FaUser /> Profile</NavLink>
+        <NavLink to={'/admin/profile'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 border-l-4 hover:border-blue-500 ${isActive ? 'border-blue-500 text-gray-800' : 'text-gray-500 border-transparent'}`}><FaUser /> Profile</NavLink>
 
         {/* Setting */}
-        <NavLink to={'/admin/setting'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 ${isActive ? 'border-l-4 border-blue-500 text-gray-800' : 'text-gray-500'}`}><IoMdSettings /> Setting</NavLink>
+        <NavLink to={'/admin/setting'} className={({ isActive }) => `flex items-center gap-4 px-6 py-3 hover:text-gray-800 border-l-4 hover:border-blue-500 ${isActive ? 'border-blue-500 text-gray-800' : 'text-gray-500 border-transparent'}`}><IoMdSettings /> Setting</NavLink>
 
         {/* Logout */}
-        <button className='flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 hover:border-l-4 hover:border-blue-500 cursor-pointer' onClick={()=>dispatch(openModal({type:"logout"}))}><CgLogOut /> Logout</button>
+        <button className='flex items-center gap-4 px-6 py-3 text-gray-500 hover:text-gray-800 border-l-4 border-transparent hover:border-blue-500 cursor-pointer' onClick={()=>dispatch(openModal({type:"logout"}))}><CgLogOut /> Logout</button>
 
       </nav>
 
